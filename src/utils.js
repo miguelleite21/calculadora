@@ -1,0 +1,26 @@
+export const rawNotions = [
+  { name: "Botão 1mm", key: "botao_1mm", parent: "Botão", value: 0.1, unit: "qnt" },
+  { name: "Botão de pressão", key: "botao_pressao", parent: "Botão", value: 0.2, unit: "qnt" },
+  { name: "Agulha máquina reta", key: "agulha_maquina_reta", parent: "Agulha", value: 2.0, unit: "qnt" },
+  { name: "Agulha overlock", key: "agulha_overlock", parent: "Agulha", value: 1.0, unit: "qnt" },
+  { name: "Elástico 8mm", key: "elastico_8mm", parent:"Elástico", value: 0.8, unit: "cm" },
+  { name: "Elástico 15mm", key: "elastico_15mm", parent:"Elástico", value: 0.5, unit: "cm" },
+  { name: "Elástico 40mm", key: "elastico_40mm", parent:"Elástico", value: 0.8, unit: "cm" },
+  { name: "Zíper destacável", key: "ziper_destacavel", value: 1.0, unit: "qnt" },
+  { name: "Cursor n° 5", key: "cursor_5", value: 0.31, unit: "qnt" },
+  { name: "Linha Retrôs", key: "linha_retros", parent:"Linha", value: 3.0, unit: "qnt" },
+  { name: "Linha de pesponto", key: "linha_pesponto", parent:"Linha", value: 4.0, unit: "qnt" },
+  { name: "Linha cone", key: "linha_cone", parent:"Linha", value: 6.0, unit: "qnt" },
+  { name: "Cone overlock", key: "cone_overlock", value: 9.0, unit: "qnt" },
+  { name: "Tinta tecido pote", key: "tinta_tecido", value: 6.0, unit: "qnt" },
+  { name: "Renda n° 5 najar", key: "renda_najar_5", value: 0.7, unit: "cm" },
+  { name: "Sianinha", key: "sianinha", value: 1.5, unit: "cm" },
+  { name: "Fita cetim n° 9 (38mm)", key: "fita_cetim_9", value: 11.5, unit: "qnt" },
+  { name: "Fita cetim n° 3 (15mm)", key: "fita_cetim_3", value: 5.49, unit: "qnt" },
+  { name: "Fita cetim n° 2 (10mm)", key: "fita_cetim_2", value: 4.7, unit: "qnt" },
+];
+export const cloths =  [
+  { key: 'verde', name: 'Tecido Verde', cost: 50 },
+  { key: 'preto', name: 'Tecido Preto', cost: 20 },
+  { key: 'vermelho', name: 'Tecido Vermelho', cost: 35 },
+];
