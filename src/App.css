@@ -18,12 +18,11 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   background-color: var(--color-bg-page);
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
 }
 
 .kawaii-container {
@@ -160,9 +159,5 @@ button.kawaii-toggle-btn:hover {
   text-align: center;
 }
 
-/* Desktop: aumentar largura do container */
-@media (min-width: 1024px) {
-  .kawaii-container {
-    max-width: 570px;
-  }
-}
+
+
