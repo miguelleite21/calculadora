@@ -14,6 +14,9 @@ import {
   Select,
   MenuItem,
   Chip,
+  Autocomplete,
+  TextField,
+  Paper,
 } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { rawNotions, cloths } from './utils';
@@ -51,7 +54,11 @@ export default function App() {
 
   const handleMetricChange = e => {
     const { name, value } = e.target;
-    if (/^[0-9]*$/.test(value) || value === '') setMetrics(prev => ({ ...prev, [name]: value }));
+    if (/^[0-9]*[,]?[0-9]*$/.test(value) || value === '')
+      setMetrics(prev => ({ 
+        ...prev, 
+        [name]: value 
+      }));
   };
 
   const handleToggleNotion = e => {
@@ -82,29 +89,48 @@ export default function App() {
 
   const handleValueCloth = e => {
     const { name, value } = e.target;
-    if (/^[0-9]*\.?[0-9]*$/.test(value) || value === '')
-      setClothsOptions(prev => ({ ...prev, [name]: { ...prev[name], value } }));
+    if (/^[0-9]*[,]?[0-9]*$/.test(value) || value === '')
+      setClothsOptions(prev => ({ 
+        ...prev, 
+        [name]: { 
+          ...prev[name], 
+          value 
+        } 
+      }));
   };
 
   const calculateResult = () => {
-    const pat = parseFloat(metrics.pattern) || 0;
-    const sew = parseFloat(metrics.sewing) || 0;
-    let total = (pat + sew) * 22;
-
+    const parse = val => parseFloat((val || '0').toString().replace(',', '.')) || 0;
+  
+    const pat = parse(metrics.pattern);
+    const sew = parse(metrics.sewing);
+    let total = (pat + sew) * 25;
+  
     Object.entries(notionOptions).forEach(([key, opt]) => {
-      if (opt.selected) total += parseFloat(opt.value) || 0;
+      if (opt.selected) {
+        const base = rawNotions.find(n => n.key === key)?.value || 0;
+        const quantity = parse(opt.value);
+        total += base * quantity;
+      }
     });
-
+  
     cloths.forEach(cloth => {
       const opt = clothsOptions[cloth.key];
-      if (opt.selected) {
-        const m = parseFloat(opt.value) || 0;
+      if (opt?.selected) {
+        const m = parse(opt.value);
         total += cloth.cost * m;
       }
     });
-
+  
     setResult(total);
   };
+  
+  const handleReset = () => {
+    setMetrics(initialMetrics);
+    setNotionOptions(initialNotions);
+    setClothsOptions(initialClothsOpts);
+    setResult(null);
+  }
 
   const noParent = rawNotions.filter(item => !item.parent);
   const noParentCols = splitIntoColumns(noParent, 2);
@@ -119,7 +145,7 @@ export default function App() {
 
         <fieldset className="section-geral">
           <legend>Geral</legend>
-          <InputLabel htmlFor="pattern-input">Molde:</InputLabel>
+          <InputLabel htmlFor="pattern-input">Modelagem:</InputLabel>
           <OutlinedInput
             id="pattern-input"
             name="pattern"
@@ -148,30 +174,99 @@ export default function App() {
               {openFabrics ? <ExpandLess /> : <ExpandMore />}
             </IconButton>
             {openFabrics && (
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                  <InputLabel htmlFor="fabric-select-label">Tecidos</InputLabel>
-                  <Select
-                    id="fabric-select-label"
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1,width: '100%' }}>
+                  <Autocomplete
+                  fullWidth
                     multiple
-                    value={Object.keys(clothsOptions).filter(k => clothsOptions[k].selected)}
-                    onChange={handleFabricsChange}
-                    className="full-Imputs"
-                    renderValue={selected => (
-                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                        {selected.map(key => {
-                          const c = cloths.find(c => c.key === key);
-                          return <Chip key={key} label={c.name} size="small" sx={{ backgroundColor: 'pink' }} />;
-                        })}
-                      </Box>
+                    options={cloths}
+                    disableCloseOnSelect
+                    disablePortal
+                    getOptionLabel={opt => `${opt.name} (R$ ${opt.cost})`}
+                    value={cloths.filter(c => clothsOptions[c.key].selected)}
+                    onChange={(_, selectedItems) => {
+                      const selectedKeys = selectedItems.map(i => i.key)
+                      setClothsOptions(prev =>
+                        cloths.reduce((acc, cloth) => {
+                          const was = prev[cloth.key].value
+                          const sel = selectedKeys.includes(cloth.key)
+                          return {
+                            ...acc,
+                            [cloth.key]: { selected: sel, value: sel ? was : '' }
+                          }
+                        }, {})
+                      )
+                    }}
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        fullWidth
+                        label="Tecidos"
+                        placeholder="Selecione ou busque..."
+                        className="full-Imputs"
+                        InputLabelProps={{
+                          sx: {
+                            color: '#a84d8d',
+                            '&.Mui-focused': {
+                              color: '#a84d8d',
+                            }
+                          }
+                        }}
+                        sx={{
+                          // contorno do input quando focado
+                          '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            borderColor: '#ffc5d3'
+                          }
+                        }}
+                      />
                     )}
-                  >
-                    {cloths.map(c => (
-                      <MenuItem key={c.key} value={c.key}>
-                        <Checkbox checked={clothsOptions[c.key].selected} />
-                        {c.name} (R$ {c.cost})
-                      </MenuItem>
-                    ))}
-                  </Select>
+                    PopperProps={{
+                      sx: {
+                        width: '100% !important',
+                        overflowX: 'hidden',
+                      }
+                    }}
+                    PaperComponent={props => <Paper {...props} />}
+                    PaperProps={{
+                      sx: {
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        // background da lista
+                        bgcolor: '#ffe2f1',
+                        // sombra personalizada
+                        boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
+                      }
+                    }}
+                    ListboxProps={{
+                      sx: {
+                        maxHeight: 200,
+                        overflowY: 'auto',
+                        // cor do texto de cada opção
+                        '& .MuiAutocomplete-option': {
+                          color: '#ffacb8',
+                          '&.Mui-focused': {
+                            bgcolor: '#ff8aa3',  
+                            color: '#fff',  // bg quando hover/focus na opção
+                          }
+                        }
+                      }
+                    }}
+                    renderTags={(selected, getTagProps) =>
+                      selected.map((opt, idx) => (
+                        <Chip
+                          key={opt.key}
+                          label={opt.name}
+                          size="small"
+                          sx={{ 
+                            backgroundColor: '#ff8aa3',
+                            color:"#fff",
+                            '& .MuiChip-deleteIcon': { color: '#ffc5d3' }
+                          }}
+                          {...getTagProps({ index: idx })}
+                        />
+                      ))
+                    }
+                  />
+
                 {cloths.map(c => {
                   const opt = clothsOptions[c.key];
                   return (
@@ -197,41 +292,39 @@ export default function App() {
         </fieldset>
 
         {noParentCols.length > 0 && (
-          <fieldset className="section-aviamentos">
-            <legend>Outros Aviamentos</legend>
-            <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start', position: 'relative', paddingBottom: '2rem' }}>
-              <IconButton className="kawaii-toggle-btn" size="small" onClick={() => setOpenAviamentos(a => !a)}>
-                {openAviamentos ? <ExpandLess /> : <ExpandMore />}
-              </IconButton>
-              {openAviamentos && (
-                <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
-                  {noParentCols.map((col, i) => (
-                    <Box key={i} sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                      {col.map(item => (
-                        <Box key={item.key} className="aviamento-item" sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-                          <FormControlLabel
-                            control={<Checkbox name={item.key} checked={notionOptions[item.key].selected} onChange={handleToggleNotion} />} 
-                            label={item.name}
+          <fieldset className="section-aviamentos" style={{ paddingBottom: '2rem', position: 'relative' }}>
+            <legend>Aviamentos</legend>
+            <IconButton className="kawaii-toggle-btn" size="small" onClick={() => setOpenAviamentos(a => !a)}>
+              {openAviamentos ? <ExpandLess /> : <ExpandMore />}
+            </IconButton>
+            {openAviamentos && (
+              <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+                {noParentCols.map((col, i) => (
+                  <Box key={i} sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                    {col.map(item => (
+                      <Box key={item.key} className="aviamento-item" sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                        <FormControlLabel
+                          control={<Checkbox name={item.key} checked={notionOptions[item.key].selected} onChange={handleToggleNotion} />}
+                          label={item.name}
+                        />
+                        {notionOptions[item.key].selected && (
+                          <OutlinedInput
+                            size="small"
+                            name={item.key}
+                            value={notionOptions[item.key].value}
+                            onChange={handleValueNotion}
+                            placeholder="0"
+                            margin="dense"
+                            className='neru'
+                            endAdornment={<InputAdornment position="end">{item.unit}</InputAdornment>}
                           />
-                          {notionOptions[item.key].selected && (
-                            <OutlinedInput
-                              size="small"
-                              name={item.key}
-                              value={notionOptions[item.key].value}
-                              onChange={handleValueNotion}
-                              placeholder="0"
-                              margin="dense"
-                              className='neru'
-                              endAdornment={<InputAdornment position="end">{item.unit}</InputAdornment>}
-                            />
-                          )}
-                        </Box>
-                      ))}
-                    </Box>
-                  ))}
-                </Box>
-              )}
-            </Box>
+                        )}
+                      </Box>
+                    ))}
+                  </Box>
+                ))}
+              </Box>
+            )}
           </fieldset>
         )}
 
@@ -279,9 +372,25 @@ export default function App() {
           );
         })}
 
-        <Button variant="contained" fullWidth onClick={calculateResult} sx={{ mt: 2 }}>
-          Calcular
-        </Button>
+        <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
+          <Button
+            onClick={calculateResult}
+            sx={{ flex: 2 }}    
+            className='calc'
+          >
+            Calcular
+          </Button>
+          <Button
+            className='reset'
+            variant="outlined"
+            color="secondary"
+            onClick={handleReset}
+            sx={{ flex: 1 }}    
+          >
+            Limpar
+          </Button>
+        </Box>
+        
 
         {result !== null && (
           <Typography id="result" variant="h6">

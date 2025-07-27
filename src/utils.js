@@ -1,8 +1,8 @@
 export const rawNotions = [
   { name: "Botão 1mm", key: "botao_1mm", parent: "Botão", value: 0.1, unit: "qnt" },
   { name: "Botão de pressão", key: "botao_pressao", parent: "Botão", value: 0.2, unit: "qnt" },
-  { name: "Agulha máquina reta", key: "agulha_maquina_reta", parent: "Agulha", value: 2.0, unit: "qnt" },
-  { name: "Agulha overlock", key: "agulha_overlock", parent: "Agulha", value: 1.0, unit: "qnt" },
+  { name: "Agulha máquina reta", key: "agulha_maquina_reta", parent: "Agulha", value: 1.0, unit: "qnt" },
+  { name: "Agulha overlock", key: "agulha_overlock", parent: "Agulha", value: 2.0, unit: "qnt" },
   { name: "Elástico 8mm", key: "elastico_8mm", parent:"Elástico", value: 0.8, unit: "cm" },
   { name: "Elástico 15mm", key: "elastico_15mm", parent:"Elástico", value: 0.5, unit: "cm" },
   { name: "Elástico 40mm", key: "elastico_40mm", parent:"Elástico", value: 0.8, unit: "cm" },
@@ -15,12 +15,34 @@ export const rawNotions = [
   { name: "Tinta tecido pote", key: "tinta_tecido", value: 6.0, unit: "qnt" },
   { name: "Renda n° 5 najar", key: "renda_najar_5", value: 0.7, unit: "cm" },
   { name: "Sianinha", key: "sianinha", value: 1.5, unit: "cm" },
-  { name: "Fita cetim n° 9 (38mm)", key: "fita_cetim_9", value: 11.5, unit: "qnt" },
-  { name: "Fita cetim n° 3 (15mm)", key: "fita_cetim_3", value: 5.49, unit: "qnt" },
-  { name: "Fita cetim n° 2 (10mm)", key: "fita_cetim_2", value: 4.7, unit: "qnt" },
-];
-export const cloths =  [
-  { key: 'verde', name: 'Tecido Verde', cost: 50 },
-  { key: 'preto', name: 'Tecido Preto', cost: 20 },
-  { key: 'vermelho', name: 'Tecido Vermelho', cost: 35 },
-];
+  { name: "Fita cetim n° 9 (38mm)", key: "fita_cetim_9", parent: "Fita", value: 11.5, unit: "qnt" },
+  { name: "Fita cetim n° 3 (15mm)", key: "fita_cetim_3", parent: "Fita", value: 5.49, unit: "qnt" },
+  { name: "Fita cetim n° 2 (10mm)", key: "fita_cetim_2", parent: "Fita", value: 4.7, unit: "qnt" },
+].slice()
+.sort((a, b) => a.name.localeCompare(b.name));
+
+export const cloths = [
+  { key: 'oxfordine', name: 'Oxfordine', cost: 15.90 },
+  { key: 'tricoline', name: 'Tricoline', cost: 25.90 },
+  { key: 'amanda_crepe', name: 'Crepe Amanda', cost: 22.90 },
+  { key: 'dune_crepe', name: 'Crepe Duna', cost: 19.90 },
+  { key: 'black_leather', name: 'Couro Preto', cost: 63.90 },
+  { key: 'black_cirre', name: 'Cirre Preto', cost: 34.90 },
+  { key: 'gabardine', name: 'Gabardine', cost: 22.90 },
+  { key: 'two_way_crepe', name: 'Crepe Two Way', cost: 19.90 },
+  { key: 'satin_no_stretch', name: 'Cetim sem elastano', cost: 7.90 },
+  { key: 'satin_with_stretch', name: 'Cetim com elastano', cost: 12.90 },
+  { key: 'silky', name: 'Sedinha', cost: 44.90 },
+  { key: 'tailoring', name: 'Alfaiataria', cost: 26.90 },
+  { key: 'light_brim', name: 'Brim Leve', cost: 34.90 },
+  { key: 'mixed_light_brim', name: 'Brim Leve Misto', cost: 29.90 },
+  { key: 'neoprene', name: 'Neoprene', cost: 32.90 },
+  { key: 'lycra', name: 'Lycra', cost: 33.90 },
+  { key: 'pure_linen', name: 'Linho Puro', cost: 119.90 },
+  { key: 'refresh', name: 'Refresh', cost: 15.90 },
+  { key: 'oxford', name: 'Oxford', cost: 8.90 },
+  { key: 'cannes_tricoline', name: 'Tricoline Cannes', cost: 22.90 },
+  { key: 'cotton_knit', name: 'Malha de Algodão', cost: 24.90 },
+  { key: 'viscose_linen', name: 'Viscolinho', cost: 24.90 },
+].slice()
+.sort((a, b) => a.name.localeCompare(b.name));

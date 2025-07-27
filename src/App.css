@@ -1,3 +1,15 @@
+/* Variáveis de cores */
+:root {
+  --color-bg-page: #ffe2f1;
+  --color-form-bg: #fff;
+  --color-border: #ffc5d3;
+  --color-primary: #ffc5d3;
+  --color-secondary: #ff8aa3;
+  --color-hover: #ffacb8;
+  --color-white: #fff;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
 /* Base reset */
 * {
   box-sizing: border-box;
@@ -7,7 +19,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
-  background-color: #ffe2f1;
+  background-color: var(--color-bg-page);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,17 +32,19 @@ body {
   padding: 20px;
   transition: max-width 0.3s ease;
 }
+
 .aviamento-input {
   width: 50px;
   padding: 4px 8px;
   font-size: 0.9rem;
 }
+
 .kawaii-form {
-  background-color: #fff;
-  border: 2px solid #ffc5d3;
+  background-color: var(--color-form-bg);
+  border: 2px solid var(--color-border);
   border-radius: 20px;
   padding: 30px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px var(--shadow-color);
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -40,16 +54,18 @@ body {
 /* Seções */
 .kawaii-form .section-geral,
 .kawaii-form .section-aviamentos {
-  border: 1px dashed #ffc5d3;
+  border: 1px dashed var(--color-border);
   border-radius: 12px;
   padding: 15px;
   position: relative;
 }
 
 .kawaii-form .section-geral legend,
-.kawaii-form .section-aviamentos legend,h1,h4 {
+.kawaii-form .section-aviamentos legend,
+h1,
+h4 {
   font-weight: bold;
-  color: #a84d8d;
+  color: var(--color-secondary);
   padding: 0 10px;
 }
 
@@ -57,77 +73,96 @@ body {
 .kawaii-form label {
   display: block;
   margin-bottom: 5px;
-  color: #a84d8d;
+  color: var(--color-secondary);
   font-weight: 500;
 }
 
 .kawaii-form .full-Imputs{
   width: 100%;
 }
+
 .kawaii-toggle-btn {
   background: none;
   border: none;
   cursor: pointer;
   vertical-align: middle;
-  padding: 5px!important;
+  padding: 5px !important;
   text-align: center;
   position: absolute;
   bottom: 40px;
   left: 95%;
 }
-.legend-toggle{
+
+.legend-toggle {
   position: relative;
 }
+
 /* Aviamentos: grid de checkboxes */
 .kawaii-form .aviamentos-grid {
-  /* em vez de display: grid; */
-  column-count: 2;        /* número de colunas que você quer */
-  column-gap: 20px;       /* espaçamento horizontal */
+  column-count: 2;
+  column-gap: 20px;
 }
 
 .kawaii-form .aviamentos-grid .aviamento-item {
-  display: block;         /* cada bloco flui na coluna */
-  break-inside: avoid;    /* não parte o bloco entre colunas */
-  margin-bottom: 10px;    /* espaçamento vertical */
+  display: block;
+  break-inside: avoid;
+  margin-bottom: 10px;
 }
-.neru{
+
+.neru {
   width: 80%;
 }
+
 .kawaii-form .aviamentos-grid .aviamento-item label {
   margin: 0;
   font-size: 0.95rem;
 }
 
 /* Botão resultado */
-.kawaii-form button {
-  background-color: #ffc5d3;
+.kawaii-form button.calc,
+button.kawaii-toggle-btn {
+  background-color: var(--color-primary);
   border: none;
   border-radius: 12px;
   padding: 12px;
-  color: #fff;
+  color: var(--color-white);
   font-size: 1.05rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-.kawaii-form button:hover {
-  background-color: #ffacb8;
+.kawaii-form button.calc:hover,
+button.kawaii-toggle-btn:hover {
+  background-color: var(--color-hover);
+}
+
+.kawaii-form button.reset {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-hover);
+  border-radius: 12px;
+  padding: 12px;
+  color: var(--color-primary);
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.kawaii-form button.reset:hover {
+  background-color: var(--color-hover);
+  color: var(--color-white);
 }
 
 /* Resultado formatado */
 #result {
   margin-top: 10px;
   font-weight: bold;
-  color: #a84d8d;
+  color: var(--color-secondary);
   text-align: center;
 }
-
-
-
 
 /* Desktop: aumentar largura do container */
 @media (min-width: 1024px) {
   .kawaii-container {
-    max-width: 800px;
+    max-width: 570px;
   }
 }
