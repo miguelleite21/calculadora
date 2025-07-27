@@ -51,6 +51,7 @@ export default function App() {
     categories.reduce((acc, cat) => ({ ...acc, [cat.key]: true }), {})
   );
   const [result, setResult] = useState(null);
+  const [resultDetails, setResultDetails] = useState([]);
 
   const handleMetricChange = e => {
     const { name, value } = e.target;
@@ -75,18 +76,6 @@ export default function App() {
       setNotionOptions(prev => ({ ...prev, [name]: { ...prev[name], value } }));
   };
 
-  const handleFabricsChange = e => {
-    const { value } = e.target;
-    const selectedKeys = typeof value === 'string' ? value.split(',') : value;
-    setClothsOptions(prev =>
-      cloths.reduce((acc, cloth) => {
-        const was = prev[cloth.key].value;
-        const sel = selectedKeys.includes(cloth.key);
-        return { ...acc, [cloth.key]: { selected: sel, value: sel ? was : '' } };
-      }, {})
-    );
-  };
-
   const handleValueCloth = e => {
     const { name, value } = e.target;
     if (/^[0-9]*[,]?[0-9]*$/.test(value) || value === '')
@@ -104,25 +93,37 @@ export default function App() {
   
     const pat = parse(metrics.pattern);
     const sew = parse(metrics.sewing);
-    let total = (pat + sew) * 25;
+    const baseCost = (pat + sew) * 25;
+  
+    let total = baseCost;
+    const details = [];
+  
+    if (pat || sew) {
+      details.push({ name: 'Modelagem + Costura', value: baseCost });
+    }
   
     Object.entries(notionOptions).forEach(([key, opt]) => {
       if (opt.selected) {
         const base = rawNotions.find(n => n.key === key)?.value || 0;
         const quantity = parse(opt.value);
-        total += base * quantity;
+        const subtotal = base * quantity;
+        total += subtotal;
+        details.push({ name: rawNotions.find(n => n.key === key)?.name || key, value: subtotal });
       }
     });
   
     cloths.forEach(cloth => {
       const opt = clothsOptions[cloth.key];
       if (opt?.selected) {
-        const m = parse(opt.value);
-        total += cloth.cost * m;
+        const meters = parse(opt.value);
+        const subtotal = cloth.cost * meters;
+        total += subtotal;
+        details.push({ name: cloth.name, value: subtotal });
       }
     });
   
     setResult(total);
+    setResultDetails(details);
   };
   
   const handleReset = () => {
@@ -393,9 +394,19 @@ export default function App() {
         
 
         {result !== null && (
-          <Typography id="result" variant="h6">
-            {result.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-          </Typography>
+          <Box id="result" sx={{ mt: 3 }}>
+            <Typography variant="h6" sx={{ textAlign: 'center', mb: 1 }}>
+              Total: {result.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+            </Typography>
+            <Box sx={{ borderTop: '1px solid #ffc5d3', pt: 1 }}>
+              {resultDetails.map((item, idx) => (
+                <Typography key={idx} variant="body2" sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span>{item.name}</span>
+                  <span>{item.value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                </Typography>
+              ))}
+            </Box>
+          </Box>
         )}
       </form>
     </Box>
