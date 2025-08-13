@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import {
   Button,
@@ -6,13 +6,10 @@ import {
   Typography,
   OutlinedInput,
   InputLabel,
-  FormControl,
   FormControlLabel,
   Checkbox,
   InputAdornment,
   IconButton,
-  Select,
-  MenuItem,
   Chip,
   Autocomplete,
   TextField,
@@ -37,14 +34,14 @@ function splitIntoColumns(items, numCols) {
   return cols;
 }
 
+const initialMetrics = { pattern: '', sewing: '', profit:'' }
+const initialNotions = rawNotions.reduce((acc, item) => ({ ...acc, [item.key]: { selected: false, value: '' } }), {})
+const initialClothsOpts = cloths.reduce((acc, item) => ({ ...acc, [item.key]: { selected: false, value: '' } }), {})
+
 export default function App() {
-  const [metrics, setMetrics] = useState({ pattern: '', sewing: '' });
-  const [notionOptions, setNotionOptions] = useState(
-    rawNotions.reduce((acc, item) => ({ ...acc, [item.key]: { selected: false, value: '' } }), {})
-  );
-  const [clothsOptions, setClothsOptions] = useState(
-    cloths.reduce((acc, item) => ({ ...acc, [item.key]: { selected: false, value: '' } }), {})
-  );
+  const [metrics, setMetrics] = useState(initialMetrics);
+  const [notionOptions, setNotionOptions] = useState(initialNotions);
+  const [clothsOptions, setClothsOptions] = useState(initialClothsOpts);
   const [openFabrics, setOpenFabrics] = useState(true);
   const [openAviamentos, setOpenAviamentos] = useState(true);
   const [openMap, setOpenMap] = useState(
@@ -93,13 +90,14 @@ export default function App() {
   
     const pat = parse(metrics.pattern);
     const sew = parse(metrics.sewing);
+    const profit = parse(metrics.profit);
     const baseCost = (pat + sew) * 25;
   
     let total = baseCost;
     const details = [];
   
     if (pat || sew) {
-      details.push({ name: 'Modelagem + Costura', value: baseCost });
+      details.push({ name: 'Modelagem', value: pat*25 },{ name: 'Costura', value: sew*25 });
     }
   
     Object.entries(notionOptions).forEach(([key, opt]) => {
@@ -121,7 +119,11 @@ export default function App() {
         details.push({ name: cloth.name, value: subtotal });
       }
     });
-  
+    
+    const profitValue = (total * profit) / 100;
+    details.push({ name: 'Lucro', value: profitValue});
+
+    total += profitValue
     setResult(total);
     setResultDetails(details);
   };
@@ -350,6 +352,15 @@ export default function App() {
                           <FormControlLabel
                             control={<Checkbox name={item.key} checked={notionOptions[item.key]?.selected || false} onChange={handleToggleNotion} />}
                             label={item.name}
+                            sx={{
+                                alignItems: 'flex-start',
+                                '.MuiFormControlLabel-label': {
+                                  whiteSpace: 'normal',        
+                                  overflowWrap: 'break-word',  
+                                  wordBreak: 'break-word',     
+                                  lineHeight: 1.2
+                                }
+                              }}
                           />
                           {notionOptions[item.key]?.selected && (
                             <OutlinedInput
@@ -372,7 +383,19 @@ export default function App() {
             </fieldset>
           );
         })}
-
+          <fieldset className="section-lucro">
+          <legend>Extra</legend>
+          <InputLabel htmlFor="profit-input">Lucro:</InputLabel>
+          <OutlinedInput
+            id="profit-input"
+            name="profit"
+            value={metrics.profit}
+            onChange={handleMetricChange}
+            placeholder="0"
+            margin="dense"
+            endAdornment={<InputAdornment position="end" >%</InputAdornment>}
+          />
+        </fieldset>
         <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
           <Button
             onClick={calculateResult}

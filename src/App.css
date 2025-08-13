@@ -52,6 +52,7 @@ body {
 
 /* Seções */
 .kawaii-form .section-geral,
+.kawaii-form .section-lucro,
 .kawaii-form .section-aviamentos {
   border: 1px dashed var(--color-border);
   border-radius: 12px;
@@ -60,6 +61,7 @@ body {
 }
 
 .kawaii-form .section-geral legend,
+.kawaii-form .section-lucro legend,
 .kawaii-form .section-aviamentos legend,
 h1,
 h4 {
