@@ -57,3 +57,14 @@ export const cloths = [
   { key: 'viscose_linen', name: 'Viscolinho', cost: 24.90 },
 ].slice()
 .sort((a, b) => a.name.localeCompare(b.name));
+
+
+export function splitIntoColumns(items, numCols) {
+  const cols = Array.from({ length: numCols }, () => []);
+  items.forEach((item, idx) => cols[idx % numCols].push(item));
+  return cols;
+}
+
+export function parseNumber(val) {
+  return parseFloat((val || '0').toString().replace(',', '.')) || 0;
+}

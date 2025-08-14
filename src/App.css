@@ -38,7 +38,7 @@ body {
   font-size: 0.9rem;
 }
 
-.kawaii-form {
+.kawaii-form{
   background-color: var(--color-form-bg);
   border: 2px solid var(--color-border);
   border-radius: 20px;
@@ -49,7 +49,14 @@ body {
   flex-direction: column;
   gap: 20px;
 }
-
+.pdf-body {
+  border: 2px solid var(--color-border);
+  border-radius: 20px;
+  box-shadow: 0 4px 15px var(--shadow-color);
+  text-align: left;
+  padding: 30px;
+  gap: 20px;
+}
 /* Seções */
 .kawaii-form .section-geral,
 .kawaii-form .section-lucro,
@@ -63,8 +70,7 @@ body {
 .kawaii-form .section-geral legend,
 .kawaii-form .section-lucro legend,
 .kawaii-form .section-aviamentos legend,
-h1,
-h4 {
+h1, h4, .pdf-title {
   font-weight: bold;
   color: var(--color-secondary);
   padding: 0 10px;
@@ -131,9 +137,64 @@ button.kawaii-toggle-btn {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+button.pdf{
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 12px;
+  color: var(--color-white);
+  transition: background-color 0.3s ease;
+  left: 27%;
+}
+
+
+button.calc {
+  background-color: var(--color-secondary);
+  border: none;
+  border-radius: 12px;
+  color: var(--color-white);
+  transition: background-color 0.3s ease;
+  padding: 8px 16px; 
+  font-size: 0.9rem;
+}
+
+button.pdf:hover,button.calc:hover {
+  background-color: var(--color-hover);
+}
+
+.custom-file-upload {
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 12px;
+  padding: 12px;
+  color: var(--color-white);
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.custom-file-upload:hover {
+  background-color: var(--color-hover);
+}
+
+/* Ajuste para o DialogContent se necessário */
+.pdf-body .MuiDialogContent-root {
+  padding: 20px;
+}
+
+/* Garanta que o Dialog tenha o fundo e borda consistentes */
+.pdf-body .MuiPaper-root {
+  background-color: var(--color-form-bg);
+  border: 2px solid var(--color-border);
+  border-radius: 20px;
+  box-shadow: 0 4px 15px var(--shadow-color);
+}
 
 .kawaii-form button.calc:hover,
-button.kawaii-toggle-btn:hover {
+button.kawaii-toggle-btn:hover,
+button.pdf:hover {
   background-color: var(--color-hover);
 }
 
