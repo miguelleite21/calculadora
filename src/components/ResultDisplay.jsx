@@ -1,5 +1,3 @@
-// components/ResultDisplay.js
-import { Box, Typography, Button } from '@mui/material';
 import { useState } from 'react';
 import {
   Dialog,
@@ -7,13 +5,19 @@ import {
   DialogContent,
   DialogActions,
   TextField,
+  Box, 
+  Typography, 
+  Button 
 } from '@mui/material';
+import { generatePdf } from '../utils/generatePdf'; 
 
 export default function ResultDisplay({ result, details }) {
   if (result === null) return null;
 
   const [open, setOpen] = useState(false);
-  const [name, setname] = useState('');
+  const [name, setName] = useState('');
+  const [peca, setPeca] = useState('');
+  const [data, setData] = useState('');
   const [qnt, setQnt] = useState('');
   const [images, setImages] = useState([]);
 
@@ -25,9 +29,9 @@ export default function ResultDisplay({ result, details }) {
     setImages(selectedFiles);
   };
 
-  const handleGenerate = () => {
-    console.log('Generating PDF with:', { peca: name, quantidade: qnt, images, result, details });
-    handleClose();
+  const handleGenerate = async () => {
+    await generatePdf(name, qnt, images, details, result, peca, data);
+    // handleClose();
   };
 
   return (
@@ -52,13 +56,13 @@ export default function ResultDisplay({ result, details }) {
       <Dialog open={open} onClose={handleClose} className='pdf-body'>
         
         <DialogTitle variant="h4" gutterBottom sx={{ textAlign: 'center' }}  className='pdf-title'>Gerar PDF</DialogTitle>
-        <DialogContent >
+        <DialogContent>
           <TextField
             fullWidth
-            label="Nome da Peça"
+            label="Nome do Cliente"
             value={name}
-            placeholder="Digite o nome da peça"
-            onChange={(e) => setname(e.target.value)}
+            placeholder="Digite o nome do cliente"
+            onChange={(e) => setName(e.target.value)}
             sx={{ mb: 2, mt:2,
                 '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
                 borderColor: '#ffc5d3',
@@ -69,7 +73,7 @@ export default function ResultDisplay({ result, details }) {
               '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
                 borderColor: '#ff8aa3',
               },
-             }}
+            }}
             InputLabelProps={{
                     sx: {
                       color: '#a84d8d',
@@ -77,7 +81,7 @@ export default function ResultDisplay({ result, details }) {
                         color: '#a84d8d',
                       },
                     },
-                  }}
+            }}
           />
           <TextField
             fullWidth
@@ -95,7 +99,59 @@ export default function ResultDisplay({ result, details }) {
               '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
                 borderColor: '#ff8aa3',
               }
-                }}
+            }}
+            InputLabelProps={{
+                    sx: {
+                      color: '#a84d8d',
+                      '&.Mui-focused': {
+                        color: '#a84d8d',
+                      },
+                    },
+            }}
+          />
+          <TextField
+            fullWidth
+            label="Nome da Peça"
+            value={peca}
+            placeholder="Digite o nome da peça"
+            onChange={(e) => setPeca(e.target.value)}
+            sx={{ mb: 2, mt:2,
+                '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
+                borderColor: '#ffc5d3',
+              },
+              '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                borderColor: '#ffc5d3',
+              },
+              '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                borderColor: '#ff8aa3',
+              },
+            }}
+            InputLabelProps={{
+                    sx: {
+                      color: '#a84d8d',
+                      '&.Mui-focused': {
+                        color: '#a84d8d',
+                      },
+                    },
+            }}
+          />
+          <TextField
+            fullWidth
+            label="Data"
+            value={data}
+            placeholder="data"
+            onChange={(e) => setData(e.target.value)}
+            sx={{ mb: 2, mt:2,
+                '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
+                borderColor: '#ffc5d3',
+              },
+              '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                borderColor: '#ffc5d3',
+              },
+              '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                borderColor: '#ff8aa3',
+              },
+            }}
             InputLabelProps={{
                     sx: {
                       color: '#a84d8d',
