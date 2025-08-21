@@ -5,9 +5,8 @@ import { cloths } from './utils';
 
 applyPlugin(jsPDF);
 
-export const generatePdf = async (name, qnt, images, details, result, peca, data) => {
+export const generatePdf = async (name, images, pieces, date) => {
   const doc = new jsPDF();
-
   const loadImage = (src) => new Promise((resolve, reject) => {
     const img = new Image();
     img.src = src;
@@ -22,110 +21,142 @@ export const generatePdf = async (name, qnt, images, details, result, peca, data
     reader.readAsDataURL(file);
   });
 
+    // // Adicione o font customizado (substitua 'BASE64_STRING_HERE' pelo base64 real do arquivo .ttf do font AntraxaGoth)
+    // const fontBase64 = 'BASE64_STRING_HERE'; // Converta o .ttf para base64 e cole aqui
+    // doc.addFileToVFS('AntraxaGoth.ttf', fontBase64);
+    // doc.addFont('AntraxaGoth.ttf', 'AntraxaGoth', 'normal');
 
-  const logo = await loadImage(logoSrc);
-  const logoWidth = 15;
-  const logoHeight = (logo.height / logo.width) * logoWidth;
-  const logoX = 15;
-  doc.addImage(logoSrc, 'PNG', logoX, 10, logoWidth, logoHeight);
-  let currentY = 10 + logoHeight + 10;
+    const logo = await loadImage(logoSrc);
+    const logoWidth = 15;
+    const logoHeight = (logo.height / logo.width) * logoWidth;
+    const logoX = 15;
+    doc.addImage(logoSrc, 'PNG', logoX, 10, logoWidth, logoHeight);
+    let currentY = 10 + logoHeight + 10;
 
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(18);
-  doc.setTextColor(0, 0, 0);
-  doc.text(`Orçamento ${name}`, logoX, currentY);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(18);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Orçamento ${name}`, logoX, currentY);
 
-  currentY += 8;
+    currentY += 8;
 
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'normal');
-  doc.text(`Data: ${data}`, logoX, currentY);
-  currentY += 6;
-  doc.text(`Peça: ${peca}`, logoX, currentY);
-  currentY += 12;
-
-  let modelagem = details.find(d => d.name === 'Modelagem')?.value || 0;
-  let costura = details.find(d => d.name === 'Costura')?.value || 0;
-  let lucro = details.find(d => d.name === 'Lucro')?.value || 0;
-  const modelagemCosturaSum = modelagem + costura + lucro;
-
-  let aviamentosSum = 0;
-  const clothsHeaders = [];
-  const clothsValues = [];
-  details.forEach(d => {
-    if (d.name === 'Modelagem' || d.name === 'Costura' || d.name === 'Lucro') return;
-    const isCloth = cloths.some(c => c.name === d.name);
-    if (isCloth) {
-      clothsHeaders.push(`Tecido (${d.name})`);
-      clothsValues.push(d.value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
-    } else {
-      aviamentosSum += d.value;
-    }
-  });
-
-  const headers = [
-    'Quantidade',
-    'Peça',
-    'Modelagem sob medida + costura',
-    'Aviamentos (linhas, botão, zíper)',
-    ...clothsHeaders,
-    'Total'
-  ];
-
-  const values = [
-    qnt || 1,
-    peca || "Peça sob medida",
-    modelagemCosturaSum.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
-    aviamentosSum.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
-    ...clothsValues,
-    result.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-  ];
-
-  doc.autoTable({
-    startY: currentY,
-    head: [headers],
-    body: [values],
-    theme: 'grid',
-    styles: {
-      font: 'AntraxaGoth', 
-      fontSize: 10,
-      textColor: [0, 0, 0],
-      lineColor: [0, 0, 0],
-      lineWidth: 0.1
-    },
-    headStyles: {
-      fillColor: [255, 138, 163], 
-      textColor: [255, 255, 255], 
-      fontStyle: 'normal'
-    },
-    columnStyles: headers.reduce((acc, _, idx) => ({ ...acc, [idx]: { cellWidth: 'auto' } }), {}),
-  });
-
-  currentY = doc.lastAutoTable.finalY + 10;
-
-  if (images.length > 0) {
     doc.setFontSize(12);
-    doc.text('Imagens:', 10, currentY);
-    currentY += 10;
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Data: ${date}`, logoX, currentY);
+    currentY += 12;
 
-    const maxImageWidth = 100;
-    const pageHeight = doc.internal.pageSize.height;
+    const tableHeaders = ['Peça', 'Quantidade', 'Modelagem sob medida + costura + lucro', 'Aviamentos', 'Tecidos', 'Total Unitário', 'Subtotal'];
+    const tableBody = pieces.map(piece => {
+      let modelagem = piece.details.find(d => d.name === 'Modelagem')?.value || 0;
+      let costura = piece.details.find(d => d.name === 'Costura')?.value || 0;
+      let lucro = piece.details.find(d => d.name === 'Lucro')?.value || 0;
+      const modelagemCosturaSum = modelagem + costura + lucro;
 
-    for (const imageFile of images) {
-      const base64 = await readFileAsDataURL(imageFile);
+      let aviamentosSum = 0;
+      let tecidosSum = 0;
+      piece.details.forEach(d => {
+        if (d.name === 'Modelagem' || d.name === 'Costura' || d.name === 'Lucro') return;
+        const isCloth = cloths.some(c => c.name === d.name);
+        if (isCloth) {
+          tecidosSum += d.value;
+        } else {
+          aviamentosSum += d.value;
+        }
+      });
+
+      const subtotal = piece.total * piece.quantity;
+
+      return [
+        piece.name,
+        piece.quantity,
+        modelagemCosturaSum.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+        aviamentosSum.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+        tecidosSum.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+        piece.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+        subtotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+      ];
+    });
+
+    const grandTotal = pieces.reduce((acc, piece) => acc + (piece.total * piece.quantity), 0);
+    const footRow = ['', '', '', '', '', 'Total', grandTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })];
+
+    doc.autoTable({
+      startY: currentY,
+      head: [tableHeaders],
+      body: tableBody,
+      foot: [footRow],
+      theme: 'grid',
+      styles: { font: 'helvetica', fontSize: 10, textColor: [0, 0, 0], lineColor: [0, 0, 0], lineWidth: 0.1 },
+      headStyles: { fillColor: [255, 197, 211] },
+      footStyles: { fillColor: [255, 197, 211] },
+      columnStyles: tableHeaders.reduce((acc, _, idx) => ({ ...acc, [idx]: { cellWidth: 'auto' } }), {}),
+    });
+
+    currentY = doc.lastAutoTable.finalY + 10;
+if (images.length > 0) {
+  doc.setFontSize(12);
+  doc.text('Imagens:', 10, currentY);
+  currentY += 10;
+
+  const maxImageWidth = 80; 
+  const margin = 10;
+  const gap = 10; 
+  const pageWidth = doc.internal.pageSize.width;
+  const pageHeight = doc.internal.pageSize.height;
+  const availableWidth = pageWidth - margin * 2;
+  const availableHeightForPage = pageHeight - margin * 2;
+
+  for (let i = 0; i < images.length; i += 2) {
+    const pair = images.slice(i, i + 2);
+    const loaded = await Promise.all(pair.map(async (file) => {
+      const base64 = await readFileAsDataURL(file);
       const img = await loadImage(base64);
-      const imgWidth = maxImageWidth;
-      const imgHeight = (img.height / img.width) * imgWidth;
+      return { file, base64, img };
+    }));
 
-      if (currentY + imgHeight + 10 > pageHeight) {
+    const cols = loaded.length; 
+    let thumbWidth = Math.min(maxImageWidth, (availableWidth - gap * (cols - 1)) / cols);
+
+    let heights = loaded.map(l => (l.img.height / l.img.width) * thumbWidth);
+    let rowMaxHeight = Math.max(...heights);
+
+    if (rowMaxHeight > (availableHeightForPage - (currentY - margin))) {
+      const remainingSpace = pageHeight - margin - currentY;
+      if (remainingSpace < 30) { 
         doc.addPage();
-        currentY = 10;
+        currentY = margin;
+      }
+      const maxAllowedHeight = pageHeight - margin - currentY;
+      const scaleFactor = maxAllowedHeight / rowMaxHeight;
+      thumbWidth = thumbWidth * scaleFactor;
+      heights = heights.map(h => h * scaleFactor);
+      rowMaxHeight = rowMaxHeight * scaleFactor;
+    }
+
+    const rowWidth = thumbWidth * cols + gap * (cols - 1);
+    const y = currentY;
+    let x 
+      if (cols === 1) {
+        x = margin; 
+      } else {
+        x = margin + (availableWidth - rowWidth) / 2; 
       }
 
-      doc.addImage(base64, imageFile.type.includes('png') ? 'PNG' : 'JPEG', 10, currentY, imgWidth, imgHeight);
-      currentY += imgHeight + 10;
+    for (let j = 0; j < cols; j++) {
+      const item = loaded[j];
+      const h = heights[j];
+      const format = item.file.type && item.file.type.includes('png') ? 'PNG' : 'JPEG';
+      doc.addImage(item.base64, format, x, y, thumbWidth, h);
+      x += thumbWidth + gap;
+    }
+    currentY += rowMaxHeight + 10;
+    if (currentY + 40 > pageHeight - margin && i + 2 < images.length) {
+      doc.addPage();
+      currentY = margin;
     }
   }
+}
 
-  doc.save(`Orçamento ${name || ''} Pink Padise.pdf`);
+
+    doc.save(`Orçamento ${name || ''} Pink Paradise.pdf`);
 };

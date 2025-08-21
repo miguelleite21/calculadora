@@ -7,13 +7,23 @@ export default function useCalculator() {
   const [metrics, setMetrics] = useState(initialMetrics);
   const [notionOptions, setNotionOptions] = useState(initialNotions);
   const [clothsOptions, setClothsOptions] = useState(initialClothsOpts);
+  const [pieceName, setPieceName] = useState('');
+  const [quantity, setQuantity] = useState(1);
   const [result, setResult] = useState(null);
   const [resultDetails, setResultDetails] = useState([]);
+  const [pieces, setPieces] = useState([]);
 
   const handleMetricChange = e => {
     const { name, value } = e.target;
     if (/^[0-9]*[,]?[0-9]*$/.test(value) || value === '')
       setMetrics(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handlePieceNameChange = (e) => setPieceName(e.target.value);
+
+  const handleQuantityChange = (e) => {
+    const { value } = e.target;
+    if (/^[0-9]*$/.test(value) || value === '') setQuantity(value);
   };
 
   const handleToggleNotion = e => {
@@ -77,25 +87,51 @@ export default function useCalculator() {
     setResultDetails(details);
   };
 
-  const handleReset = () => {
+  const resetForm = () => {
     setMetrics(initialMetrics);
     setNotionOptions(initialNotions);
     setClothsOptions(initialClothsOpts);
+    setPieceName('');
+    setQuantity(1);
     setResult(null);
+    setResultDetails([]);
+  };
+
+  const handleReset = () => {
+    resetForm();
+    setPieces([]);
+  };
+
+  const addPiece = () => {
+    const currentPiece = {
+      name: pieceName,
+      quantity: parseInt(quantity, 10),
+      details: resultDetails,
+      total: result
+    };
+
+    setPieces(prev => [...prev, currentPiece]);
+    resetForm();
   };
 
   return {
     metrics,
     notionOptions,
     clothsOptions,
+    pieceName,
+    quantity,
     result,
     resultDetails,
+    pieces,
     handleMetricChange,
+    handlePieceNameChange,
+    handleQuantityChange,
     handleToggleNotion,
     handleValueNotion,
     handleValueCloth,
     calculateResult,
     handleReset,
+    addPiece,
     setClothsOptions
   };
 }

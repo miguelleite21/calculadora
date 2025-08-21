@@ -1,4 +1,3 @@
-// App.js
 import { Box, Typography, Button } from '@mui/material';
 import './App.css';
 import GeneralForm from './components/GeneralForm';
@@ -15,14 +14,20 @@ export default function App() {
     metrics,
     notionOptions,
     clothsOptions,
+    pieceName,
+    quantity,
     result,
     resultDetails,
+    pieces,
     handleMetricChange,
+    handlePieceNameChange,
+    handleQuantityChange,
     handleToggleNotion,
     handleValueNotion,
     handleValueCloth,
     calculateResult,
     handleReset,
+    addPiece,
     setClothsOptions,
   } = useCalculator();
 
@@ -33,7 +38,14 @@ export default function App() {
           Calculadora Pink Paradise
         </Typography>
 
-        <GeneralForm metrics={metrics} onMetricChange={handleMetricChange} />
+        <GeneralForm
+          metrics={metrics}
+          onMetricChange={handleMetricChange}
+          pieceName={pieceName}
+          onPieceNameChange={handlePieceNameChange}
+          quantity={quantity}
+          onQuantityChange={handleQuantityChange}
+        />
 
         <FabricsSection
           clothsOptions={clothsOptions}
@@ -74,7 +86,13 @@ export default function App() {
           </Button>
         </Box>
 
-        <ResultDisplay result={result} details={resultDetails} />
+        <ResultDisplay
+          result={result}
+          details={resultDetails}
+          addPiece={addPiece}
+          pieces={pieces}
+          handleReset={handleReset}
+        />
       </form>
     </Box>
   );
