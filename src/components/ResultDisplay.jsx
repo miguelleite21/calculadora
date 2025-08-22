@@ -17,7 +17,10 @@ export default function ResultDisplay({ result, details, addPiece, pieces,handle
   const [data, setData] = useState('');
   const [images, setImages] = useState([]);
 
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    if(pieces.length==0)addPiece()
+    setOpen(true);
+  }
   const handleClose = () => setOpen(false);
   const reset=()=>{
     handleReset()

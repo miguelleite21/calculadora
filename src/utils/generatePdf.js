@@ -2,7 +2,7 @@ import { jsPDF } from 'jspdf';
 import { applyPlugin } from 'jspdf-autotable';
 import logoSrc from '../assets/pink.png';
 import { cloths } from './utils';
-
+import fontBase64 from '../assets/fonts/gothicaClass.txt?raw';
 applyPlugin(jsPDF);
 
 export const generatePdf = async (name, images, pieces, date) => {
@@ -25,6 +25,8 @@ export const generatePdf = async (name, images, pieces, date) => {
     // const fontBase64 = 'BASE64_STRING_HERE'; // Converta o .ttf para base64 e cole aqui
     // doc.addFileToVFS('AntraxaGoth.ttf', fontBase64);
     // doc.addFont('AntraxaGoth.ttf', 'AntraxaGoth', 'normal');
+    doc.addFileToVFS('GothicaClass.ttf', fontBase64);
+    doc.addFont('GothicaClass.ttf', 'GothicaClass', 'normal');
 
     const logo = await loadImage(logoSrc);
     const logoWidth = 15;
@@ -88,7 +90,7 @@ export const generatePdf = async (name, images, pieces, date) => {
       theme: 'grid',
       styles: { font: 'helvetica', fontSize: 10, textColor: [0, 0, 0], lineColor: [0, 0, 0], lineWidth: 0.1 },
       headStyles: { fillColor: [255, 197, 211] },
-      footStyles: { fillColor: [255, 197, 211] },
+      footStyles: { fillColor: [255, 255, 255] },
       columnStyles: tableHeaders.reduce((acc, _, idx) => ({ ...acc, [idx]: { cellWidth: 'auto' } }), {}),
     });
 
