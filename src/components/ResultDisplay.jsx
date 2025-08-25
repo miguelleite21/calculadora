@@ -51,7 +51,7 @@ export default function ResultDisplay({ result, details, addPiece, pieces,handle
             pdf
           </Button>
         </Box>
-        <Box sx={{ borderTop: '1px solid #ffc5d3', pt: 1 }}>
+        <Box sx={{ borderTop: '1px solid #EF8DAA', pt: 1 }}>
           {details.map((item, idx) => (
             <Typography key={idx} variant="body2" sx={{ display: 'flex', justifyContent: 'space-between' }}>
               <span>{item.name}</span>
@@ -86,20 +86,20 @@ export default function ResultDisplay({ result, details, addPiece, pieces,handle
             onChange={(e) => setName(e.target.value)}
             sx={{ mb: 2, mt:2,
                 '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
-                borderColor: '#ffc5d3',
+                borderColor: '#EF8DAA',
               },
               '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                borderColor: '#ffc5d3',
+                borderColor: '#EF8DAA',
               },
               '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
-                borderColor: '#ff8aa3',
+                borderColor: '#D83082',
               },
             }}
             InputLabelProps={{
                     sx: {
-                      color: '#a84d8d',
+                      color: '#D83082',
                       '&.Mui-focused': {
-                        color: '#a84d8d',
+                        color: '#D83082',
                       },
                     },
             }}
@@ -114,21 +114,21 @@ export default function ResultDisplay({ result, details, addPiece, pieces,handle
             
             sx={{ mb: 2, mt:2,
                 '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
-                borderColor: '#ffc5d3',
+                borderColor: '#EF8DAA',
               },
               '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                borderColor: '#ffc5d3',
+                borderColor: '#EF8DAA',
               },
               '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
-                borderColor: '#ff8aa3',
+                borderColor: '#D83082',
               },
             }}
             InputLabelProps={{
                     shrink: true, 
                     sx: {
-                      color: '#a84d8d',
+                      color: '#D83082',
                       '&.Mui-focused': {
-                        color: '#a84d8d',
+                        color: '#D83082',
                       },
                     },
                   }}
@@ -145,7 +145,7 @@ export default function ResultDisplay({ result, details, addPiece, pieces,handle
             style={{ display: 'none' }}
           />
           {images.length > 0 && (
-            <Typography variant="body2" sx={{ mt: 1, color: '#ff8aa3' }}>
+            <Typography variant="body2" sx={{ mt: 1, color: '#D83082' }}>
               {images.length} imagem(s) selecionada(s)
             </Typography>
           )}

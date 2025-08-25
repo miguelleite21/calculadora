@@ -55,15 +55,15 @@ export default function FabricsSection({ clothsOptions, onValueChange, setCloths
                   className="full-Imputs"
                   InputLabelProps={{
                     sx: {
-                      color: '#a84d8d',
+                      color: '#D83082',
                       '&.Mui-focused': {
-                        color: '#a84d8d',
+                        color: '#D83082',
                       },
                     },
                   }}
                   sx={{
                     '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#ffc5d3',
+                      borderColor: '#EF8DAA',
                     },
                   }}
                 />
@@ -88,9 +88,9 @@ export default function FabricsSection({ clothsOptions, onValueChange, setCloths
                   maxHeight: 200,
                   overflowY: 'auto',
                   '& .MuiAutocomplete-option': {
-                    color: '#ffacb8',
+                    color: '#F7C0D0',
                     '&.Mui-focused': {
-                      bgcolor: '#ff8aa3',
+                      bgcolor: '#D83082',
                       color: '#fff',
                     },
                   },
@@ -103,9 +103,9 @@ export default function FabricsSection({ clothsOptions, onValueChange, setCloths
                     label={opt.name}
                     size="small"
                     sx={{
-                      backgroundColor: '#ff8aa3',
+                      backgroundColor: '#D83082',
                       color: '#fff',
-                      '& .MuiChip-deleteIcon': { color: '#ffc5d3' },
+                      '& .MuiChip-deleteIcon': { color: '#EF8DAA' },
                     }}
                     {...getTagProps({ index: idx })}
                   />

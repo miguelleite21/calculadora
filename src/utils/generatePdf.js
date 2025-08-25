@@ -20,11 +20,6 @@ export const generatePdf = async (name, images, pieces, date) => {
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
-
-    // // Adicione o font customizado (substitua 'BASE64_STRING_HERE' pelo base64 real do arquivo .ttf do font AntraxaGoth)
-    // const fontBase64 = 'BASE64_STRING_HERE'; // Converta o .ttf para base64 e cole aqui
-    // doc.addFileToVFS('AntraxaGoth.ttf', fontBase64);
-    // doc.addFont('AntraxaGoth.ttf', 'AntraxaGoth', 'normal');
     doc.addFileToVFS('GothicaClass.ttf', fontBase64);
     doc.addFont('GothicaClass.ttf', 'GothicaClass', 'normal');
 
@@ -88,8 +83,8 @@ export const generatePdf = async (name, images, pieces, date) => {
       body: tableBody,
       foot: [footRow],
       theme: 'grid',
-      styles: { font: 'helvetica', fontSize: 10, textColor: [0, 0, 0], lineColor: [0, 0, 0], lineWidth: 0.1 },
-      headStyles: { fillColor: [255, 197, 211] },
+      styles: { font: 'helvetica', fontSize: 10, textColor: [0, 0, 0], lineColor: [196, 196, 196], lineWidth: 0.1 },
+      headStyles: { fillColor: [247, 192, 208] },
       footStyles: { fillColor: [255, 255, 255] },
       columnStyles: tableHeaders.reduce((acc, _, idx) => ({ ...acc, [idx]: { cellWidth: 'auto' } }), {}),
     });

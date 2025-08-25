@@ -8,7 +8,7 @@ import ProfitSection from './components/ProfitSection';
 import ResultDisplay from './components/ResultDisplay';
 import { categories } from './utils/data';
 import useCalculator from './hooks/useCalculator';
-
+import PinkParadiseImg from './assets/pnkParadise.png';
 export default function App() {
   const {
     metrics,
@@ -34,9 +34,14 @@ export default function App() {
   return (
     <Box className="kawaii-container">
       <form className="kawaii-form" onSubmit={(e) => e.preventDefault()}>
-        <Typography variant="h4" gutterBottom sx={{ textAlign: 'center' }}>
-          Calculadora Pink Paradise
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+          <Box
+            component="img"
+            src={PinkParadiseImg}
+            alt="Pink Paradise Ateliê"
+            sx={{ width: "65%", height: 'auto' }} 
+          />
+        </Box>
 
         <GeneralForm
           metrics={metrics}

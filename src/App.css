@@ -2,10 +2,10 @@
 :root {
   --color-bg-page: #ffe2f1;
   --color-form-bg: #fff;
-  --color-border: #ffc5d3;
-  --color-primary: #ffc5d3;
-  --color-secondary: #ff8aa3;
-  --color-hover: #ffacb8;
+  --color-border: #EF8DAA;
+  --color-primary: #EF8DAA;
+  --color-secondary: #D83082;
+  --color-hover: #F7C0D0;
   --color-white: #fff;
   --shadow-color: rgba(0, 0, 0, 0.1);
 }
