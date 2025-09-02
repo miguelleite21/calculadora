@@ -42,13 +42,12 @@ export const generatePdf = async (name, images, pieces, date) => {
     doc.text(`Data: ${date}`, logoX, currentY);
     currentY += 12;
 
-    const tableHeaders = ['Peça', 'Quantidade', 'Modelagem sob medida + costura + lucro', 'Aviamentos', 'Tecidos', 'Total Unitário', 'Subtotal'];
+    const tableHeaders = ['Peça', 'Quantidade', 'Modelagem sob medida + costura + lucro', 'Aviamentos', 'Tecidos', 'Total Unitário', 'Descontos', 'Subtotal'];
     const tableBody = pieces.map(piece => {
       let modelagem = piece.details.find(d => d.name === 'Modelagem')?.value || 0;
       let costura = piece.details.find(d => d.name === 'Costura')?.value || 0;
       let lucro = piece.details.find(d => d.name === 'Lucro')?.value || 0;
       let desconto = piece.details.find(d => d.name === 'Desconto')?.value || 0;
-
       const modelagemCosturaSum = modelagem + costura + lucro;
 
       let aviamentosSum = 0;
@@ -62,7 +61,7 @@ export const generatePdf = async (name, images, pieces, date) => {
           aviamentosSum += d.value;
         }
       });
-
+      const unitTotal = tecidosSum + aviamentosSum + modelagemCosturaSum
       const subtotal = piece.total * piece.quantity;
 
       return [
@@ -71,14 +70,14 @@ export const generatePdf = async (name, images, pieces, date) => {
         modelagemCosturaSum.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
         aviamentosSum.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
         tecidosSum.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
-        piece.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
-        // desconto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+        unitTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+        desconto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
         subtotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
       ];
     });
 
     const grandTotal = pieces.reduce((acc, piece) => acc + (piece.total * piece.quantity), 0);
-    const footRow = ['', '', '', '', '', 'Total', grandTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })];
+    const footRow = ['', '', '', '', '', '', 'Total', grandTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })];
 
     doc.autoTable({
       startY: currentY,

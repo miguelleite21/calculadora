@@ -14,18 +14,18 @@ import { generatePdf } from '../utils/generatePdf';
 export default function ResultDisplay({ result, details, addPiece, pieces,handleReset }) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
-  const [data, setData] = useState('');
+  const [date, setDate] = useState('');
   const [images, setImages] = useState([]);
 
   const handleOpen = () => {
-    if(pieces.length==0)addPiece()
+    addPiece()
     setOpen(true);
   }
   const handleClose = () => setOpen(false);
   const reset=()=>{
     handleReset()
     setImages([])
-    setData('')
+    setDate('')
     setName('')
   }
   const handleImageChange = (e) => {
@@ -34,7 +34,7 @@ export default function ResultDisplay({ result, details, addPiece, pieces,handle
   };
 
   const handleGenerate = async () => {
-    await generatePdf(name, images, pieces, data);
+    await generatePdf(name, images, pieces, date);
     handleClose();
     reset()
   };
@@ -107,9 +107,9 @@ export default function ResultDisplay({ result, details, addPiece, pieces,handle
           <TextField
             fullWidth
             label="Data"
-            value={data}
+            value={date}
             placeholder="data"
-            onChange={(e) => setData(e.target.value)}
+            onChange={(e) => setDate(e.target.value)}
             type="date"
             
             sx={{ mb: 2, mt:2,

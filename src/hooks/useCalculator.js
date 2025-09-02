@@ -107,6 +107,9 @@ export default function useCalculator() {
   };
 
   const addPiece = () => {
+    const modelagem = resultDetails.find(d => d.name === 'Modelagem')?.value || 0;
+    const costura = resultDetails.find(d => d.name === 'Costura')?.value || 0;
+    if(modelagem == 0 && costura == 0) return
     const currentPiece = {
       name: pieceName,
       quantity: parseInt(quantity, 10),
