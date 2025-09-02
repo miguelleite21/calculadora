@@ -10,7 +10,7 @@ export const categories = Object.values(
   }, {})
 );
 
-export const initialMetrics = { pattern: '', sewing: '', profit: '' };
+export const initialMetrics = { pattern: '', sewing: '', profit: '', discont: '' };
 
 export const initialNotions = rawNotions.reduce(
   (acc, item) => ({ ...acc, [item.key]: { selected: false, value: '' } }),

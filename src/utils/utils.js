@@ -5,15 +5,20 @@ export const rawNotions = [
   { name: "Agulha overlock", key: "agulha_overlock", parent: "Agulha", value: 2.0, unit: "und" },
   { name: "Elástico 8mm", key: "elastico_8mm", parent:"Elástico", value: 0.8, unit: "m" },
   { name: "Elástico 15mm", key: "elastico_15mm", parent:"Elástico", value: 0.5, unit: "m" },
-  { name: "Elástico 40mm", key: "elastico_40mm", parent:"Elástico", value: 0.8, unit: "m" },
+  { name: "Elástico preto 19mm", key: "elastico_19mm", parent:"Elástico", value: 1.3, unit: "m" },
+  { name: "Elástico preto 20mm", key: "elastico_20mm", parent:"Elástico", value: 0.6, unit: "m" },
+  { name: "Elástico preto 23mm", key: "elastico_23mm", parent:"Elástico", value: 1.6, unit: "m" },
+  { name: "Elástico preto 35mm", key: "elastico_35mm", parent:"Elástico", value: 0.8, unit: "m" },
+  { name: "Elástico 40mm", key: "elastico_40mm", parent:"Elástico", value: 1.3, unit: "m" },
+  { name: "Elástico 50mm", key: "elastico_50mm", parent:"Elástico", value: 1.0, unit: "m" },
   { name: "Cursor zíper nº 5", key: "cursor_5", value: 0.31, unit: "und" },
   { name: "Linha Retrôs", key: "linha_retros", parent:"Linha", value: 3.0, unit: "und" },
   { name: "Linha de pesponto", key: "linha_pesponto", parent:"Linha", value: 4.0, unit: "und" },
   { name: "Linha cone", key: "linha_cone", parent:"Linha", value: 6.0, unit: "und" },
   { name: "Linha overlock", key: "linha_cone_overlock", parent:"Linha", value: 9.0, unit: "und" },
   { name: "Tinta tecido pote", key: "tinta_tecido", value: 6.0, unit: "und" },
-  { name: "Renda nº 5 najar", key: "renda_najar_5", value: 0.7, unit: "cm" },
-  { name: "Sianinha", key: "sianinha", parent: "Fita", value: 1.5, unit: "cm" },
+  { name: "Renda nº 5 najar", key: "renda_najar_5", value: 0.7, unit: "m" },
+  { name: "Sianinha", key: "sianinha", parent: "Fita", value: 1.5, unit: "m" },
   { name: "Fita cetim n° 9 (38mm)", key: "fita_cetim_9", parent: "Fita", value: 11.5, unit: "und" },
   { name: "Fita cetim n° 3 (15mm)", key: "fita_cetim_3", parent: "Fita", value: 5.49, unit: "und" },
   { name: "Fita cetim n° 2 (10mm)", key: "fita_cetim_2", parent: "Fita", value: 4.7, unit: "und" },
@@ -27,8 +32,11 @@ export const rawNotions = [
   { name: "Zíper Destacável Niq Fino Ping 70cm NYBC", key: "ziper_destacavel_70cm", parent: "Ziper", value: 5.92, unit: "und" },
   { name: "Zíper Destacável Niq Fino Ping 75cm NYBC", key: "ziper_destacavel_75cm", parent: "Ziper", value: 6.06, unit: "und" },
   { name: "Lastex Real 500 mts Branco", key: "lastex_500mts_branco", parent: "Lastex", value: 34.65, unit: "und" },
-  { name: "Lastex Real 10 mts Branco", key: "lastex_10mts_branco", parent: "Lastex", value: 2.24, unit: "und" }
-
+  { name: "Lastex Real 10 mts Branco", key: "lastex_10mts_branco", parent: "Lastex", value: 2.24, unit: "und" },
+  { name: "Kit alça 4 und", key: "kitAlca4und", value: 1.59, unit: "und" },
+  { name: "Par Alça sutiã media", key: "alcasutiamedia", value: 5.10, unit: "und" },
+  { name: "Par Alça sutiã media", key: "alcasutiamedia", value: 5.10, unit: "und" },
+  { name: "Elastico azelha 2,3mm", key: "azelha", parent: "Elástico", value: 1, unit: "m" }
 ].slice()
 .sort((a, b) => a.name.localeCompare(b.name));
 
@@ -55,6 +63,9 @@ export const cloths = [
   { key: 'cannes_tricoline', name: 'Tricoline Cannes', cost: 22.90 },
   { key: 'cotton_knit', name: 'Malha de Algodão', cost: 24.90 },
   { key: 'viscose_linen', name: 'Viscolinho', cost: 24.90 },
+  { key: 'Organza', name: 'Organza', cost: 12.90 },
+  { key: 'organzaimportada', name: 'Organza importada', cost: 19.90 },
+  { key: 'lame', name: 'lamê ', cost: 39.90 },
 ].slice()
 .sort((a, b) => a.name.localeCompare(b.name));
 

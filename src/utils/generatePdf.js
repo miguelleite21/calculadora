@@ -47,12 +47,14 @@ export const generatePdf = async (name, images, pieces, date) => {
       let modelagem = piece.details.find(d => d.name === 'Modelagem')?.value || 0;
       let costura = piece.details.find(d => d.name === 'Costura')?.value || 0;
       let lucro = piece.details.find(d => d.name === 'Lucro')?.value || 0;
+      let desconto = piece.details.find(d => d.name === 'Desconto')?.value || 0;
+
       const modelagemCosturaSum = modelagem + costura + lucro;
 
       let aviamentosSum = 0;
       let tecidosSum = 0;
       piece.details.forEach(d => {
-        if (d.name === 'Modelagem' || d.name === 'Costura' || d.name === 'Lucro') return;
+        if (d.name === 'Modelagem' || d.name === 'Costura' || d.name === 'Lucro' || d.name === 'Desconto') return;
         const isCloth = cloths.some(c => c.name === d.name);
         if (isCloth) {
           tecidosSum += d.value;
@@ -70,6 +72,7 @@ export const generatePdf = async (name, images, pieces, date) => {
         aviamentosSum.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
         tecidosSum.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
         piece.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+        // desconto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
         subtotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
       ];
     });

@@ -50,6 +50,8 @@ export default function useCalculator() {
     const pat = parseNumber(metrics.pattern);
     const sew = parseNumber(metrics.sewing);
     const profit = parseNumber(metrics.profit);
+    const discont = parseNumber(metrics.discont);
+
     const baseCost = (pat + sew) * 25;
 
     let total = baseCost;
@@ -81,8 +83,10 @@ export default function useCalculator() {
 
     const profitValue = (total * profit) / 100;
     details.push({ name: 'Lucro', value: profitValue });
-
     total += profitValue;
+    const valueWithDiscont = (total*discont)/100
+    details.push({ name: 'Desconto', value: valueWithDiscont });
+    total -= valueWithDiscont
     setResult(total);
     setResultDetails(details);
   };
