@@ -1,4 +1,4 @@
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import './App.css';
 import GeneralForm from './components/GeneralForm';
 import FabricsSection from './components/FabricsSection';
@@ -19,6 +19,8 @@ export default function App() {
     result,
     resultDetails,
     pieces,
+    presets,
+    selectedPreset,
     handleMetricChange,
     handlePieceNameChange,
     handleQuantityChange,
@@ -29,6 +31,7 @@ export default function App() {
     handleReset,
     addPiece,
     setClothsOptions,
+    handlePresetChange,
   } = useCalculator();
 
   return (
@@ -50,6 +53,9 @@ export default function App() {
           onPieceNameChange={handlePieceNameChange}
           quantity={quantity}
           onQuantityChange={handleQuantityChange}
+          selectedPreset={selectedPreset}
+          onPresetChange={handlePresetChange}
+          presets={presets}
         />
 
         <FabricsSection

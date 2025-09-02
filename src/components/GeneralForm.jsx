@@ -1,9 +1,23 @@
-import { OutlinedInput, InputLabel } from '@mui/material';
-
-export default function GeneralForm({ metrics, onMetricChange, pieceName, onPieceNameChange, quantity, onQuantityChange }) {
+import { OutlinedInput, InputLabel, Select, MenuItem } from '@mui/material';
+export default function GeneralForm({ metrics, onMetricChange, pieceName, onPieceNameChange, quantity, onQuantityChange, selectedPreset, onPresetChange, presets}) {
   return (
     <fieldset className="section-geral">
       <legend>Geral</legend>
+      <InputLabel htmlFor="preset-select">Selecione uma Peça Pré-definida:</InputLabel>
+      <Select
+        id="preset-select"
+        value={selectedPreset}
+        onChange={onPresetChange}
+        fullWidth
+        className="full-Imputs"
+        sx={{ mb: 2 }}
+      >
+        {presets.map(preset => (
+          <MenuItem key={preset.key} value={preset.key}>
+            {preset.name}
+          </MenuItem>
+        ))}
+      </Select>
       <InputLabel htmlFor="piece-name">Nome da Peça:</InputLabel>
       <OutlinedInput
         id="piece-name"
@@ -21,7 +35,6 @@ export default function GeneralForm({ metrics, onMetricChange, pieceName, onPiec
         placeholder="1"
         margin="dense"
         className="full-Imputs"
-        type='number'
       />
       <InputLabel htmlFor="pattern-input">Modelagem:</InputLabel>
       <OutlinedInput

@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { cloths } from '../utils/utils';
+import CustomAutocomplete from './CustomAutocomplete';
 
 export default function FabricsSection({ clothsOptions, onValueChange, setClothsOptions }) {
   const [openFabrics, setOpenFabrics] = useState(true);
@@ -25,13 +26,8 @@ export default function FabricsSection({ clothsOptions, onValueChange, setCloths
         </IconButton>
         {openFabrics && (
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, width: '100%' }}>
-            <Autocomplete
-              fullWidth
-              multiple
+            <CustomAutocomplete
               options={cloths}
-              disableCloseOnSelect
-              disablePortal
-              getOptionLabel={(opt) => `${opt.name} (R$ ${opt.cost})`}
               value={cloths.filter((c) => clothsOptions[c.key].selected)}
               onChange={(_, selectedItems) => {
                 const selectedKeys = selectedItems.map((i) => i.key);
@@ -46,56 +42,10 @@ export default function FabricsSection({ clothsOptions, onValueChange, setCloths
                   }, {})
                 );
               }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  fullWidth
-                  label="Tecidos"
-                  placeholder="Selecione ou busque..."
-                  className="full-Imputs"
-                  InputLabelProps={{
-                    sx: {
-                      color: '#D83082',
-                      '&.Mui-focused': {
-                        color: '#D83082',
-                      },
-                    },
-                  }}
-                  sx={{
-                    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#EF8DAA',
-                    },
-                  }}
-                />
-              )}
-              PopperProps={{
-                sx: {
-                  width: '100% !important',
-                  overflowX: 'hidden',
-                },
-              }}
-              PaperComponent={(props) => <Paper {...props} />}
-              sx={{
-                '& .MuiPaper-root': {
-                  width: '100%',
-                  boxSizing: 'border-box',
-                  bgcolor: '#ffe2f1',
-                  boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
-                },
-              }}
-              ListboxProps={{
-                sx: {
-                  maxHeight: 200,
-                  overflowY: 'auto',
-                  '& .MuiAutocomplete-option': {
-                    color: '#F7C0D0',
-                    '&.Mui-focused': {
-                      bgcolor: '#D83082',
-                      color: '#fff',
-                    },
-                  },
-                },
-              }}
+              multiple={true}
+              label="Tecidos"
+              placeholder="Selecione ou busque..."
+              getOptionLabel={(opt) => `${opt.name} (R$ ${opt.cost})`}
               renderTags={(selected, getTagProps) =>
                 selected.map((opt, idx) => (
                   <Chip

@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { parseNumber } from '../utils/utils';
-import { rawNotions, cloths } from '../utils/utils';
+import { rawNotions, cloths, presets } from '../utils/utils';
 import { initialMetrics, initialNotions, initialClothsOpts } from '../utils/data';
 
 export default function useCalculator() {
   const [metrics, setMetrics] = useState(initialMetrics);
   const [notionOptions, setNotionOptions] = useState(initialNotions);
   const [clothsOptions, setClothsOptions] = useState(initialClothsOpts);
+  const [selectedPreset, setSelectedPreset] = useState('none');
   const [pieceName, setPieceName] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [result, setResult] = useState(null);
@@ -24,6 +25,17 @@ export default function useCalculator() {
   const handleQuantityChange = (e) => {
     const { value } = e.target;
     if (/^[0-9]*$/.test(value) || value === '') setQuantity(value);
+  };
+
+  const handlePresetChange = (e) => {
+    const presetKey = e.target.value;
+    setSelectedPreset(presetKey);
+    const preset = presets.find(p => p.key === presetKey);
+    if (preset) {
+      setMetrics(preset.metrics);
+      setNotionOptions({ ...initialNotions, ...preset.notions });
+      setClothsOptions({ ...initialClothsOpts, ...preset.cloths });
+    }
   };
 
   const handleToggleNotion = e => {
@@ -50,8 +62,6 @@ export default function useCalculator() {
     const pat = parseNumber(metrics.pattern);
     const sew = parseNumber(metrics.sewing);
     const profit = parseNumber(metrics.profit);
-    const discont = parseNumber(metrics.discont);
-
     const baseCost = (pat + sew) * 25;
 
     let total = baseCost;
@@ -83,10 +93,8 @@ export default function useCalculator() {
 
     const profitValue = (total * profit) / 100;
     details.push({ name: 'Lucro', value: profitValue });
+
     total += profitValue;
-    const valueWithDiscont = (total*discont)/100
-    details.push({ name: 'Desconto', value: valueWithDiscont });
-    total -= valueWithDiscont
     setResult(total);
     setResultDetails(details);
   };
@@ -96,9 +104,10 @@ export default function useCalculator() {
     setNotionOptions(initialNotions);
     setClothsOptions(initialClothsOpts);
     setPieceName('');
-    setQuantity(1);
+    setQuantity('');
     setResult(null);
     setResultDetails([]);
+    setSelectedPreset('none');
   };
 
   const handleReset = () => {
@@ -107,9 +116,11 @@ export default function useCalculator() {
   };
 
   const addPiece = () => {
-    const modelagem = resultDetails.find(d => d.name === 'Modelagem')?.value || 0;
-    const costura = resultDetails.find(d => d.name === 'Costura')?.value || 0;
-    if(modelagem == 0 && costura == 0) return
+    if (!pieceName || !quantity || !result) {
+      alert('Preencha o nome da peça, a quantidade e calcule o resultado.');
+      return;
+    }
+
     const currentPiece = {
       name: pieceName,
       quantity: parseInt(quantity, 10),
@@ -130,6 +141,8 @@ export default function useCalculator() {
     result,
     resultDetails,
     pieces,
+    presets,
+    selectedPreset,
     handleMetricChange,
     handlePieceNameChange,
     handleQuantityChange,
@@ -139,6 +152,7 @@ export default function useCalculator() {
     calculateResult,
     handleReset,
     addPiece,
-    setClothsOptions
+    setClothsOptions,
+    handlePresetChange
   };
 }

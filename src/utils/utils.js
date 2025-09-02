@@ -69,6 +69,22 @@ export const cloths = [
 ].slice()
 .sort((a, b) => a.name.localeCompare(b.name));
 
+export const presets = [
+  {
+    key: 'none',
+    name: 'Nenhuma (Personalizado)',
+    metrics: { pattern: '', sewing: '', profit: '' },
+    notions: {},
+    cloths: {}
+  },
+  {
+    key: 'camiseta',
+    name: 'Camiseta',
+    metrics: { pattern: '2', sewing: '2', profit: '20' },
+    notions: { linha_cone_overlock: { selected: true, value: '1' } },
+    cloths: {}
+  },
+];
 
 export function splitIntoColumns(items, numCols) {
   const cols = Array.from({ length: numCols }, () => []);
