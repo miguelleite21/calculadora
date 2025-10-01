@@ -6,7 +6,26 @@ import fontBase64 from '../assets/fonts/gothicaClass.txt?raw';
 applyPlugin(jsPDF);
 
 export const generatePdf = async (name, images, pieces, date) => {
-  const doc = new jsPDF();
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4'
+  });
+
+  const addFooter = () => {
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.setFontSize(8);
+      doc.text(
+        `Pink Paradise - Página ${i} de ${pageCount}`,
+        doc.internal.pageSize.width / 2,
+        doc.internal.pageSize.height - 10,
+        { align: 'center' }
+      );
+    }
+  };
+  
   const loadImage = (src) => new Promise((resolve, reject) => {
     const img = new Image();
     img.src = src;
@@ -85,77 +104,91 @@ export const generatePdf = async (name, images, pieces, date) => {
       body: tableBody,
       foot: [footRow],
       theme: 'grid',
-      styles: { font: 'helvetica', fontSize: 10, textColor: [0, 0, 0], lineColor: [196, 196, 196], lineWidth: 0.1 },
+      styles: { 
+        font: 'helvetica', 
+        fontSize: 10, 
+        textColor: [0, 0, 0], 
+        lineColor: [196, 196, 196], 
+        lineWidth: 0.1 
+      },
       headStyles: { fillColor: [247, 192, 208] },
       footStyles: { fillColor: [255, 255, 255] },
       columnStyles: tableHeaders.reduce((acc, _, idx) => ({ ...acc, [idx]: { cellWidth: 'auto' } }), {}),
     });
 
     currentY = doc.lastAutoTable.finalY + 10;
-if (images.length > 0) {
-  doc.setFontSize(12);
-  doc.text('Imagens:', 10, currentY);
-  currentY += 10;
+  if (images.length > 0) {
+    doc.setFontSize(12);
+    doc.text('Imagens:', 10, currentY);
+    currentY += 10;
 
-  const maxImageWidth = 80; 
-  const margin = 10;
-  const gap = 10; 
-  const pageWidth = doc.internal.pageSize.width;
-  const pageHeight = doc.internal.pageSize.height;
-  const availableWidth = pageWidth - margin * 2;
-  const availableHeightForPage = pageHeight - margin * 2;
+    const maxImageWidth = 80; 
+    const margin = 10;
+    const gap = 10; 
+    const pageWidth = doc.internal.pageSize.width;
+    const pageHeight = doc.internal.pageSize.height;
+    const availableWidth = pageWidth - margin * 2;
+    const availableHeightForPage = pageHeight - margin * 2;
 
-  for (let i = 0; i < images.length; i += 2) {
-    const pair = images.slice(i, i + 2);
-    const loaded = await Promise.all(pair.map(async (file) => {
-      const base64 = await readFileAsDataURL(file);
-      const img = await loadImage(base64);
-      return { file, base64, img };
-    }));
+    for (let i = 0; i < images.length; i += 2) {
+      const pair = images.slice(i, i + 2);
+      const loaded = await Promise.all(pair.map(async (file) => {
+        const base64 = await readFileAsDataURL(file);
+        const img = await loadImage(base64);
+        return { file, base64, img };
+      }));
 
-    const cols = loaded.length; 
-    let thumbWidth = Math.min(maxImageWidth, (availableWidth - gap * (cols - 1)) / cols);
+      const cols = loaded.length; 
+      let thumbWidth = Math.min(maxImageWidth, (availableWidth - gap * (cols - 1)) / cols);
 
-    let heights = loaded.map(l => (l.img.height / l.img.width) * thumbWidth);
-    let rowMaxHeight = Math.max(...heights);
+      let heights = loaded.map(l => (l.img.height / l.img.width) * thumbWidth);
+      let rowMaxHeight = Math.max(...heights);
 
-    if (rowMaxHeight > (availableHeightForPage - (currentY - margin))) {
-      const remainingSpace = pageHeight - margin - currentY;
-      if (remainingSpace < 30) { 
+      if (rowMaxHeight > (availableHeightForPage - (currentY - margin))) {
+        const remainingSpace = pageHeight - margin - currentY;
+        if (remainingSpace < 30) { 
+          doc.addPage();
+          currentY = margin;
+        }
+        const maxAllowedHeight = pageHeight - margin - currentY;
+        const scaleFactor = maxAllowedHeight / rowMaxHeight;
+        thumbWidth = thumbWidth * scaleFactor;
+        heights = heights.map(h => h * scaleFactor);
+        rowMaxHeight = rowMaxHeight * scaleFactor;
+      }
+
+      const rowWidth = thumbWidth * cols + gap * (cols - 1);
+      const y = currentY;
+      let x 
+        if (cols === 1) {
+          x = margin; 
+        } else {
+          x = margin + (availableWidth - rowWidth) / 2; 
+        }
+
+      for (let j = 0; j < cols; j++) {
+        const item = loaded[j];
+        const h = heights[j];
+        const format = item.file.type && item.file.type.includes('png') ? 'PNG' : 'JPEG';
+        doc.addImage(item.base64, format, x, y, thumbWidth, h);
+        x += thumbWidth + gap;
+      }
+      currentY += rowMaxHeight + 10;
+      if (currentY + 40 > pageHeight - margin && i + 2 < images.length) {
         doc.addPage();
         currentY = margin;
       }
-      const maxAllowedHeight = pageHeight - margin - currentY;
-      const scaleFactor = maxAllowedHeight / rowMaxHeight;
-      thumbWidth = thumbWidth * scaleFactor;
-      heights = heights.map(h => h * scaleFactor);
-      rowMaxHeight = rowMaxHeight * scaleFactor;
-    }
-
-    const rowWidth = thumbWidth * cols + gap * (cols - 1);
-    const y = currentY;
-    let x 
-      if (cols === 1) {
-        x = margin; 
-      } else {
-        x = margin + (availableWidth - rowWidth) / 2; 
-      }
-
-    for (let j = 0; j < cols; j++) {
-      const item = loaded[j];
-      const h = heights[j];
-      const format = item.file.type && item.file.type.includes('png') ? 'PNG' : 'JPEG';
-      doc.addImage(item.base64, format, x, y, thumbWidth, h);
-      x += thumbWidth + gap;
-    }
-    currentY += rowMaxHeight + 10;
-    if (currentY + 40 > pageHeight - margin && i + 2 < images.length) {
-      doc.addPage();
-      currentY = margin;
     }
   }
-}
 
-
-    doc.save(`Orçamento ${name || ''} Pink Paradise.pdf`);
+  doc.setFontSize(10);
+  doc.text('Observações:', 10, currentY);
+  doc.setFontSize(8);
+  doc.text([
+    '- Valores sujeitos a alteração sem aviso prévio',
+    '- Prazo de entrega a combinar',
+    '- Orçamento válido por 15 dias'
+  ], 15, currentY + 5);
+  addFooter();
+  doc.save(`Orçamento ${name || ''} Pink Paradise.pdf`);
 };

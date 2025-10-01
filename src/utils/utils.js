@@ -66,6 +66,9 @@ export const cloths = [
   { key: 'Organza', name: 'Organza', cost: 12.90 },
   { key: 'organzaimportada', name: 'Organza importada', cost: 19.90 },
   { key: 'lame', name: 'lamê ', cost: 39.90 },
+  { key: 'peluciaAlta', name: 'Pelúcia alta ', cost: 129.90  },
+  { key: 'peluciaBaixa', name: 'Pelúcia baixa ', cost: 59.90},
+  { key: 'crepeDuna', name: 'Crepe duna ', cost: 19.90},
 ].slice()
 .sort((a, b) => a.name.localeCompare(b.name));
 
@@ -78,12 +81,283 @@ export const presets = [
     cloths: {}
   },
   {
-    key: 'camiseta',
-    name: 'Camiseta',
-    metrics: { pattern: '2', sewing: '2', profit: '20' },
-    notions: { linha_cone_overlock: { selected: true, value: '1' } },
+    key: 'top_faixa',
+    name: 'Top faixa',
+    metrics: { pattern: '1', sewing: '1', profit: '20' },
+    notions: 
+      { linha_cone: { selected: true, value: '1'},
+        agulha_maquina_reta: { selected: true, value: '1' }
+      },
     cloths: {}
   },
+  {
+    key: 'regata_malha',
+    name: 'Regata (malha)',
+    metrics: { pattern: '1', sewing: '1.5', profit: '20' },
+    notions: 
+      { linha_cone: { selected: true, value: '1'},
+        agulha_maquina_reta: { selected: true, value: '1' }
+      },
+    cloths: {}
+  },
+  {
+    key: 'regata_basica',
+    name: 'Regata básica (plano)',
+    metrics: { pattern: '1', sewing: '1.5', profit: '20' },
+    notions: 
+      { linha_cone: { selected: true, value: '1'},
+        agulha_maquina_reta: { selected: true, value: '1' }
+      },
+    cloths: {}
+  },
+  {
+    key: 'blusa_sem_manga',
+    name: 'Blusa (sem manga)',
+    metrics: { pattern: '1', sewing: '1.5', profit: '20' },
+    notions: 
+      { linha_cone: { selected: true, value: '1'},
+        agulha_maquina_reta: { selected: true, value: '1' }
+      },
+    cloths: {}
+  },
+  {
+    key: 'camiseta',
+    name: 'Camiseta (malha)',
+    metrics: { pattern: '1', sewing: '1.5', profit: '20' },
+    notions: 
+      { linha_cone: { selected: true, value: '1'},
+        agulha_maquina_reta: { selected: true, value: '1' }
+      },
+    cloths: {}
+  },
+  {
+    key: 'blusa_com_manga',
+    name: 'Blusa (com manga)',
+    metrics: { pattern: '1.5', sewing: '2', profit: '20' },
+    notions: 
+      { linha_cone: { selected: true, value: '1'},
+        agulha_maquina_reta: { selected: true, value: '1' }
+      },
+    cloths: {}
+  },
+  {
+    key: 'baby_tee',
+    name: 'Blusa baby tee',
+    metrics: { pattern: '1', sewing: '1.5', profit: '20' },
+    notions: 
+      { linha_cone: { selected: true, value: '1'},
+        agulha_maquina_reta: { selected: true, value: '1' }
+      },
+    cloths: {}
+  },
+  {
+    key: 'camisa_social',
+    name: 'Camisa social',
+    metrics: { pattern: '1.5', sewing: '3', profit: '20' },
+    notions: { aviamentos: { selected: true, value: '12.50' } },
+    cloths: {}
+  },
+  {
+    key: 'jaleco_basico',
+    name: 'Jaleco básico',
+    metrics: { pattern: '1.5', sewing: '1.5', profit: '20' },
+    notions: { aviamentos: { selected: true, value: '12.50' } },
+    cloths: {}
+  },
+  {
+    key: 'moletom',
+    name: 'Moletom (com/sem capuz)',
+    metrics: { pattern: '1.5', sewing: '2', profit: '20' },
+    notions: { aviamentos: { selected: true, value: '12.50' } },
+    cloths: {}
+  },
+  {
+    key: 'colete_sem_forro',
+    name: 'Colete (sem forro)',
+    metrics: { pattern: '1', sewing: '2', profit: '20' },
+    notions: 
+      { linha_cone: { selected: true, value: '1'},
+        agulha_maquina_reta: { selected: true, value: '1' }
+      },
+    cloths: {}
+  },
+  {
+    key: 'colete_com_forro',
+    name: 'Colete (com forro)',
+    metrics: { pattern: '1.3', sewing: '2.2', profit: '20' },
+    notions: 
+      { linha_cone: { selected: true, value: '1'},
+        agulha_maquina_reta: { selected: true, value: '1' }
+      },
+    cloths: {}
+  },
+  {
+    key: 'body_sem_forro',
+    name: 'Body sem forro',
+    metrics: { pattern: '1', sewing: '2', profit: '20' },
+    notions: { aviamentos: { selected: true, value: '15.00' } },
+    cloths: {}
+  },
+  {
+    key: 'body_com_forro',
+    name: 'Body com forro',
+    metrics: { pattern: '1.5', sewing: '2', profit: '20' },
+    notions: { aviamentos: { selected: true, value: '15.00' } },
+    cloths: {}
+  },
+  {
+    key: 'short_elastico',
+    name: 'Short elástico',
+    metrics: { pattern: '1', sewing: '1', profit: '20' },
+    notions: 
+      { linha_cone: { selected: true, value: '1'},
+        agulha_maquina_reta: { selected: true, value: '1' }
+      },
+    cloths: {}
+  },
+  {
+    key: 'short_ziper',
+    name: 'Short zíper',
+    metrics: { pattern: '1', sewing: '1.5', profit: '20' },
+    notions: { aviamentos: { selected: true, value: '12.00' } },
+    cloths: {}
+  },
+  {
+    key: 'bloomers',
+    name: 'Bloomers',
+    metrics: { pattern: '1', sewing: '1', profit: '20' },
+    notions: { aviamentos: { selected: true, value: '12.00' } },
+    cloths: {}
+  },
+  {
+    key: 'calca_elastico',
+    name: 'Calça (elástico)',
+    metrics: { pattern: '2', sewing: '2.5', profit: '20' },
+    notions: { aviamentos: { selected: true, value: '12.50' } },
+    cloths: {}
+  },
+  {
+    key: 'legging',
+    name: 'Legging',
+    metrics: { pattern: '1', sewing: '1', profit: '20' },
+    notions: 
+      { linha_cone: { selected: true, value: '1'},
+        agulha_maquina_reta: { selected: true, value: '1' }
+      },
+    cloths: {}
+  },
+  {
+    key: 'calca_ziper',
+    name: 'Calça zíper (braguilha)',
+    metrics: { pattern: '2', sewing: '3', profit: '20' },
+    notions: { aviamentos: { selected: true, value: '15.00' } },
+    cloths: {}
+  },
+  {
+    key: 'calca_reta',
+    name: 'Calça reta',
+    metrics: { pattern: '2', sewing: '2.5', profit: '20' },
+    notions: { aviamentos: { selected: true, value: '12.50' } },
+    cloths: {}
+  },
+  {
+    key: 'saia_elastico',
+    name: 'Saia elástico',
+    metrics: { pattern: '1', sewing: '2', profit: '20' },
+    notions: 
+      { linha_cone: { selected: true, value: '1'},
+        agulha_maquina_reta: { selected: true, value: '1' }
+      },
+    cloths: {}
+  },
+  {
+    key: 'saia_franzida',
+    name: 'Saia franzida',
+    metrics: { pattern: '1', sewing: '1', profit: '20' },
+    notions: 
+      { linha_cone: { selected: true, value: '1'},
+        agulha_maquina_reta: { selected: true, value: '1' }
+      },
+    cloths: {}
+  },
+  {
+    key: 'saia_ziper',
+    name: 'Saia zíper',
+    metrics: { pattern: '1.5', sewing: '2', profit: '20' },
+    notions: 
+      { linha_cone: { selected: true, value: '1'},
+        agulha_maquina_reta: { selected: true, value: '1' }
+      },
+    cloths: {}
+  },
+  {
+    key: 'saia_plissada',
+    name: 'Saia plissada',
+    metrics: { pattern: '0.5', sewing: '2', profit: '20' },
+    notions: 
+      { linha_cone: { selected: true, value: '1'},
+        agulha_maquina_reta: { selected: true, value: '1' }
+      },
+    cloths: {}
+  },
+  {
+    key: 'vestido_franzido_costas',
+    name: 'Vestido (saia franzida, zíper costas)',
+    metrics: { pattern: '2', sewing: '3.5', profit: '20' },
+    notions: { aviamentos: { selected: true, value: '13.00' } },
+    cloths: {}
+  },
+  {
+    key: 'vestido_tubinho',
+    name: 'Vestido tubinho',
+    metrics: { pattern: '1', sewing: '3', profit: '20' },
+    notions: 
+      { linha_cone: { selected: true, value: '1'},
+        agulha_maquina_reta: { selected: true, value: '1' }
+      },
+    cloths: {}
+  },
+  {
+    key: 'vestido_saia_gode',
+    name: 'Vestido (saia godê completa)',
+    metrics: { pattern: '2', sewing: '4', profit: '20' },
+    notions: 
+      { linha_cone: { selected: true, value: '1'},
+        agulha_maquina_reta: { selected: true, value: '1' }
+      },
+    cloths: {}
+  },
+  {
+    key: 'vestido_gode_franzido',
+    name: 'Vestido godê/franzido',
+    metrics: { pattern: '1.5', sewing: '2.5', profit: '20' },
+    notions: 
+      { linha_cone: { selected: true, value: '1'},
+        agulha_maquina_reta: { selected: true, value: '1' }
+      },
+    cloths: {}
+  },
+  {
+    key: 'vestido_franzido_alca',
+    name: 'Vestido franzido c/ alça (JSK)',
+    metrics: { pattern: '2', sewing: '3', profit: '20' },
+    notions: { aviamentos: { selected: true, value: '30.00' } },
+    cloths: {}
+  },
+  {
+    key: 'macacao_curto',
+    name: 'Macacão curto',
+    metrics: { pattern: '1', sewing: '2', profit: '20' },
+    notions: { aviamentos: { selected: true, value: '15.00' } },
+    cloths: {}
+  },
+  {
+    key: 'macacao_longo',
+    name: 'Macacão longo',
+    metrics: { pattern: '1', sewing: '2.5', profit: '20' },
+    notions: { aviamentos: { selected: true, value: '15.00' } },
+    cloths: {}
+  }
 ];
 
 export function splitIntoColumns(items, numCols) {

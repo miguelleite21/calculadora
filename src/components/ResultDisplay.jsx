@@ -10,13 +10,20 @@ import {
   Button 
 } from '@mui/material';
 import { generatePdf } from '../utils/generatePdf'; 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function ResultDisplay({ result, details, addPiece, pieces,handleReset }) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
   const [images, setImages] = useState([]);
-
+  const cleanup = () => {
+    images.forEach(img => {
+      if (img.preview) URL.revokeObjectURL(img.preview);
+    });
+  };
   const handleOpen = () => {
     addPiece()
     setOpen(true);
@@ -34,9 +41,23 @@ export default function ResultDisplay({ result, details, addPiece, pieces,handle
   };
 
   const handleGenerate = async () => {
-    await generatePdf(name, images, pieces, date);
-    handleClose();
-    reset()
+    try {
+      if (!name.trim()) {
+        toast.error('Nome do cliente é obrigatório');
+        return
+      }
+      if (!date) {
+        toast.error('Data é obrigatória');
+        return
+      }
+      await generatePdf(name, images, pieces, date);
+      handleClose();
+      reset();
+      toast.success('PDF gerado com sucesso!');
+      cleanup();
+    } catch (error) {
+      toast.error(error.message || 'Erro ao gerar PDF');
+    }
   };
 
   return (
@@ -156,6 +177,18 @@ export default function ResultDisplay({ result, details, addPiece, pieces,handle
           </Button>
         </DialogActions>
       </Dialog>
+      <ToastContainer
+      position="top-right"
+      autoClose={3000}
+      hideProgressBar={false}
+      newestOnTop
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="colored"
+    />
     </Box>
   );
 }

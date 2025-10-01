@@ -116,10 +116,6 @@ export default function useCalculator() {
   };
 
   const addPiece = () => {
-    if (!pieceName || !quantity || !result) {
-      alert('Preencha o nome da peça, a quantidade e calcule o resultado.');
-      return;
-    }
 
     const currentPiece = {
       name: pieceName,

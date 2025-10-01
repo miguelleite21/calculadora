@@ -224,3 +224,15 @@ button.pdf:hover {
 
 
 
+/* Customização do Toast */
+.Toastify__toast--error {
+  background: #ff6b6b !important;
+}
+
+.Toastify__toast--success {
+  background: #D83082 !important;
+}
+
+.Toastify__progress-bar {
+  background: #EF8DAA !important;
+}
