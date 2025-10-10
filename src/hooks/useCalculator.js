@@ -62,6 +62,7 @@ export default function useCalculator() {
     const pat = parseNumber(metrics.pattern);
     const sew = parseNumber(metrics.sewing);
     const profit = parseNumber(metrics.profit);
+    const discont = parseNumber(metrics.discont) || 0;
     const baseCost = (pat + sew) * 25;
 
     let total = baseCost;
@@ -95,6 +96,12 @@ export default function useCalculator() {
     details.push({ name: 'Lucro', value: profitValue });
 
     total += profitValue;
+
+     if (discont > 0) {
+      const discountValue = (total * discont) / 100;
+      details.push({ name: 'Desconto', value: -discountValue });
+      total -= discountValue;
+    }
     setResult(total);
     setResultDetails(details);
   };
@@ -104,7 +111,7 @@ export default function useCalculator() {
     setNotionOptions(initialNotions);
     setClothsOptions(initialClothsOpts);
     setPieceName('');
-    setQuantity('');
+    setQuantity(1);
     setResult(null);
     setResultDetails([]);
     setSelectedPreset('none');
@@ -116,10 +123,11 @@ export default function useCalculator() {
   };
 
   const addPiece = () => {
+    const qty = Math.max(1, parseInt(quantity, 10) || 1);
 
     const currentPiece = {
       name: pieceName,
-      quantity: parseInt(quantity, 10),
+      quantity: qty,
       details: resultDetails,
       total: result
     };

@@ -61,7 +61,7 @@ export const generatePdf = async (name, images, pieces, date) => {
     doc.text(`Data: ${date}`, logoX, currentY);
     currentY += 12;
 
-    const tableHeaders = ['Peça', 'Quantidade', 'Modelagem sob medida + costura + lucro', 'Aviamentos', 'Tecidos', 'Total Unitário', 'Descontos', 'Subtotal'];
+    const tableHeaders = ['Peça', 'Quantidade', 'Modelagem sob medida + costura', 'Aviamentos', 'Tecidos', 'Total Unitário', 'Descontos', 'Subtotal'];
     const tableBody = pieces.map(piece => {
       let modelagem = piece.details.find(d => d.name === 'Modelagem')?.value || 0;
       let costura = piece.details.find(d => d.name === 'Costura')?.value || 0;
