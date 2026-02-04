@@ -3,7 +3,7 @@ import { parseNumber } from '../utils/utils';
 import { rawNotions, cloths, presets } from '../utils/utils';
 import { initialMetrics, initialNotions, initialClothsOpts } from '../utils/data';
 
-export default function useCalculator() {
+export default function useCalculator(customFabrics = []) {
   const [metrics, setMetrics] = useState(initialMetrics);
   const [notionOptions, setNotionOptions] = useState(initialNotions);
   const [clothsOptions, setClothsOptions] = useState(initialClothsOpts);
@@ -82,13 +82,16 @@ export default function useCalculator() {
       }
     });
 
-    cloths.forEach(cloth => {
+    // Combinar tecidos padrão e customizados
+    const allFabrics = [...cloths, ...customFabrics];
+    
+    allFabrics.forEach(cloth => {
       const opt = clothsOptions[cloth.key];
       if (opt?.selected) {
         const meters = parseNumber(opt.value);
         const subtotal = cloth.cost * meters;
         total += subtotal;
-        details.push({ name: cloth.name, value: subtotal });
+        details.push({ name: cloth.name, value: subtotal, isCustomFabric: cloth.isCustom });
       }
     });
 

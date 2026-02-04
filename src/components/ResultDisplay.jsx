@@ -13,28 +13,32 @@ import { generatePdf } from '../utils/generatePdf';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
-export default function ResultDisplay({ result, details, addPiece, pieces,handleReset }) {
+export default function ResultDisplay({ result, details, addPiece, pieces, handleReset, customFabrics }) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
   const [images, setImages] = useState([]);
+  
   const cleanup = () => {
     images.forEach(img => {
       if (img.preview) URL.revokeObjectURL(img.preview);
     });
   };
+  
   const handleOpen = () => {
     addPiece()
     setOpen(true);
   }
+  
   const handleClose = () => setOpen(false);
-  const reset=()=>{
+  
+  const reset = () => {
     handleReset()
     setImages([])
     setDate('')
     setName('')
   }
+  
   const handleImageChange = (e) => {
     const selectedFiles = Array.from(e.target.files).slice(0, 5);
     setImages(selectedFiles);
@@ -50,7 +54,7 @@ export default function ResultDisplay({ result, details, addPiece, pieces,handle
         toast.error('Data é obrigatória');
         return
       }
-      await generatePdf(name, images, pieces, date);
+      await generatePdf(name, images, pieces, date, customFabrics);
       handleClose();
       reset();
       toast.success('PDF gerado com sucesso!');

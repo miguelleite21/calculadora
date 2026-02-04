@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Box, Button } from '@mui/material';
 import './App.css';
 import GeneralForm from './components/GeneralForm';
@@ -9,7 +10,10 @@ import ResultDisplay from './components/ResultDisplay';
 import { categories } from './utils/data';
 import useCalculator from './hooks/useCalculator';
 import PinkParadiseImg from './assets/pnkParadise.png';
+
 export default function App() {
+  const [customFabrics, setCustomFabrics] = useState([]);
+  
   const {
     metrics,
     notionOptions,
@@ -32,7 +36,7 @@ export default function App() {
     addPiece,
     setClothsOptions,
     handlePresetChange,
-  } = useCalculator();
+  } = useCalculator(customFabrics);
 
   return (
     <Box className="kawaii-container">
@@ -62,6 +66,8 @@ export default function App() {
           clothsOptions={clothsOptions}
           onValueChange={handleValueCloth}
           setClothsOptions={setClothsOptions}
+          customFabrics={customFabrics}
+          setCustomFabrics={setCustomFabrics}
         />
 
         <NotionsSection
@@ -103,6 +109,7 @@ export default function App() {
           addPiece={addPiece}
           pieces={pieces}
           handleReset={handleReset}
+          customFabrics={customFabrics}
         />
       </form>
     </Box>
